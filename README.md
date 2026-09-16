@@ -7,6 +7,9 @@ testing, linting, and an auto-generated problem index.
 See `problems/README.md` for directory layout/naming conventions and
 `patterns/README.md` for a cross-reference index of problem-solving techniques.
 
+📖 **New here? Read [`USAGE.md`](USAGE.md) for the full step-by-step guide** —
+from scaffolding a problem to implementing, testing, benchmarking, and linting it.
+
 ## Usage
 
 Create a new problem:

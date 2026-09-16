@@ -37,7 +37,10 @@ while IFS= read -r -d '' solution_file; do
   fi
 
   rows+="| ${platform} | [${title}](problems/${platform}/${slug}) | ${lang} |"$'\n'
-done < <(find "$REPO_ROOT/problems" -mindepth 3 -maxdepth 3 -type f -name 'solution.*' -print0 | sort -z)
+done < <(find "$REPO_ROOT/problems" -mindepth 3 -maxdepth 3 -type f \
+  \( -name 'solution.go' -o -name 'solution.py' -o -name 'solution.js' \
+     -o -name 'solution.ts' -o -name 'solution.cpp' -o -name 'solution.rs' \) \
+  -print0 | sort -z)
 
 TABLE="| Platform | Problem | Language |\n|---|---|---|\n"
 if [[ -z "$rows" ]]; then
