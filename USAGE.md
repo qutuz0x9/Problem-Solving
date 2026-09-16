@@ -5,6 +5,7 @@ new problem, to implementing it, to testing/benchmarking/linting it, to keeping 
 README index up to date. If you only read one doc in this repo, read this one.
 
 For quick reference see also:
+
 - `problems/README.md` — directory layout & slug/naming conventions
 - `patterns/README.md` — cross-reference index of problem-solving techniques
 
@@ -12,7 +13,7 @@ For quick reference see also:
 
 ## 1. How the repo is organized
 
-```
+```txt
 problems/
   leetcode/<slug>/     # LeetCode problems, slug = NNNN-kebab-title
   codeforces/<slug>/   # Codeforces problems, slug = <contest+letter>-kebab-title
@@ -44,14 +45,14 @@ You don't need every toolchain installed — `make test` and `make lint` detect
 what's available and print `skip (... not installed): <path>` for anything
 missing, without failing the whole run. Install only what you plan to use:
 
-| Language   | Needed for tests          | Needed for lint             |
-|------------|----------------------------|------------------------------|
+| Language   | Needed for tests           | Needed for lint                                |
+|------------|----------------------------|------------------------------------------------|
 | Go         | `go`                       | `golangci-lint` (or `gofmt`, used as fallback) |
-| Python     | `python3` + `pytest`       | `ruff`                        |
-| JavaScript | `node` + `npx` (jest)      | `npx` (eslint)                |
-| TypeScript | `node` + `npx` (ts-jest)   | `npx` (eslint)                |
-| C++        | `g++`                      | `clang-format`                |
-| Rust       | `rustc`                    | `rustfmt`                     |
+| Python     | `python3` + `pytest`       | `ruff`                                         |
+| JavaScript | `node` + `npx` (jest)      | `npx` (eslint)                                 |
+| TypeScript | `node` + `npx` (ts-jest)   | `npx` (eslint)                                 |
+| C++        | `g++`                      | `clang-format`                                 |
+| Rust       | `rustc`                    | `rustfmt`                                      |
 
 CI (`.github/workflows/ci.yml`) installs all of the above automatically, so
 everything is checked on every push/PR regardless of what you have locally.
@@ -87,14 +88,14 @@ make new PLATFORM=other LANG=rust NAME=acme-rotate-array
 
 Arguments:
 
-| Arg        | Required | Notes                                                             |
-|------------|----------|--------------------------------------------------------------------|
-| `PLATFORM` | yes      | `leetcode` \| `codeforces` \| `codewars` \| `other`                |
-| `LANG`     | yes      | `go` \| `python` \| `javascript` \| `typescript` \| `cpp` \| `rust` |
-| `NAME`     | yes      | freeform; normalized to kebab-case                                 |
+| Arg        | Required | Notes                                                                             |
+|------------|----------|-----------------------------------------------------------------------------------|
+| `PLATFORM` | yes      | `leetcode` \| `codeforces` \| `codewars` \| `other`                               |
+| `LANG`     | yes      | `go` \| `python` \| `javascript` \| `typescript` \| `cpp` \| `rust`               |
+| `NAME`     | yes      | freeform; normalized to kebab-case                                                |
 | `NUM`      | leetcode/codeforces only | leetcode: any int, zero-padded to 4 digits; codeforces: e.g. `4a` |
-| `URL`      | no       | source URL, inserted into solution header + README                |
-| `TITLE`    | no       | human title; auto-derived from `NAME` if omitted (`two-sum` → `Two Sum`) |
+| `URL`      | no       | source URL, inserted into solution header + README                                |
+| `TITLE`    | no       | human title; auto-derived from `NAME` if omitted (`two-sum` → `Two Sum`)          |
 
 If the target folder already exists, the script errors out instead of
 overwriting it.
@@ -173,9 +174,9 @@ make test DIR=problems/leetcode/0001-two-sum        # run just this one
 
 Expected output for a passing Go problem:
 
-```
+```txt
 == go test: problems/leetcode/0001-two-sum ==
-ok  	p_0001_two_sum	0.002s
+ok  p_0001_two_sum 0.002s
 ```
 
 If a toolchain isn't installed you'll see `skip (go not installed): problems/...`
@@ -211,8 +212,8 @@ rustc --edition 2021 -O -o /tmp/bench solution.rs && /tmp/bench
 
 Example Go output:
 
-```
-BenchmarkSolve-16    	30715885	        38.82 ns/op
+```txt
+BenchmarkSolve-16     30715885         38.82 ns/op
 ```
 
 ### Step 9 — Lint
@@ -277,12 +278,12 @@ and add it to the index in `patterns/README.md`.
 
 ## 6. Makefile reference
 
-| Target | Arguments | Description |
-|---|---|---|
-| `make new` | `PLATFORM=`, `LANG=`, `NAME=`, `[NUM=]`, `[URL=]`, `[TITLE=]` | Scaffold a new problem folder from templates |
-| `make test` | `[DIR=<problem-path>]` | Run tests for one problem, or all problems if `DIR` omitted |
-| `make lint` | `[DIR=<problem-path>]` | Lint one problem, or all problems if `DIR` omitted |
-| `make index` | — | Regenerate the Problem Index table in root `README.md` |
+| Target       | Arguments                                                     | Description                                                 |
+|--------------|---------------------------------------------------------------|-------------------------------------------------------------|
+| `make new`   | `PLATFORM=`, `LANG=`, `NAME=`, `[NUM=]`, `[URL=]`, `[TITLE=]` | Scaffold a new problem folder from templates                |
+| `make test`  | `[DIR=<problem-path>]`                                        | Run tests for one problem, or all problems if `DIR` omitted |
+| `make lint`  | `[DIR=<problem-path>]`                                        | Lint one problem, or all problems if `DIR` omitted          |
+| `make index` | —                                                             | Regenerate the Problem Index table in root `README.md`      |
 
 ## 7. Troubleshooting
 
