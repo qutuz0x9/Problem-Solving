@@ -1,48 +1,60 @@
 # Problem-Solving
 
-A personal workspace for practicing coding problems (LeetCode, Codeforces, and
-custom/company questions) across multiple languages, with automated scaffolding,
-testing, linting, and an auto-generated problem index.
+A personal, multi-language workspace for practicing coding problems — LeetCode,
+Codeforces, and custom/company interview questions — with automated scaffolding,
+per-language testing and linting, benchmarks, and an auto-generated problem index.
 
-See `problems/README.md` for directory layout/naming conventions and
-`patterns/README.md` for a cross-reference index of problem-solving techniques.
+## ✨ Features
 
-📖 **New here? Read [`USAGE.md`](USAGE.md) for the full step-by-step guide** —
-from scaffolding a problem to implementing, testing, benchmarking, and linting it.
+- **One command to start a new problem** — `make new` scaffolds a full folder
+  (solution, tests, benchmark, README) from a template, per platform and language.
+- **Multi-language support** — Go, Python, JavaScript, TypeScript, C++, and Rust,
+  one language per problem, chosen at creation time.
+- **Smart test/lint dispatch** — `make test` and `make lint` detect the language
+  of each problem and run the right tool, skipping gracefully if a toolchain
+  isn't installed locally.
+- **Benchmarks included** — every problem gets a benchmark file/harness for its
+  language.
+- **Auto-generated problem index** — `make index` keeps the table below in sync
+  with everything under `problems/`.
+- **CI-ready** — GitHub Actions runs tests and lint across all toolchains on
+  every push/PR.
 
-## Usage
+## 📁 Project structure
 
-Create a new problem:
-
-```sh
-make new PLATFORM=leetcode LANG=go NUM=0001 NAME=two-sum
-make new PLATFORM=codeforces LANG=python NUM=4a NAME=watermelon
-make new PLATFORM=other LANG=rust NAME=acme-rotate-array
+```
+problems/            # solved problems, organized by platform
+  leetcode/<slug>/    # e.g. 0001-two-sum
+  codeforces/<slug>/  # e.g. 4a-watermelon
+  other/<slug>/       # company/custom questions
+patterns/             # cross-reference index of problem-solving techniques
+helpers/              # scaffold script, test/lint dispatch, index generator, templates
+Makefile              # make new / test / lint / index
 ```
 
-Run tests (all problems, or a single one):
+## 🚀 Quick start
 
 ```sh
-make test
-make test DIR=problems/leetcode/0001-two-sum
+make new PLATFORM=leetcode LANG=go NUM=1 NAME=two-sum   # scaffold a problem
+make test DIR=problems/leetcode/0001-two-sum            # run its tests
+make lint DIR=problems/leetcode/0001-two-sum             # lint it
+make index                                               # refresh the index below
 ```
 
-Run linters/formatters (all problems, or a single one):
+📖 **For the full step-by-step walkthrough** (implementing a solution, writing
+real tests, running benchmarks, troubleshooting, etc.), see **[`USAGE.md`](USAGE.md)**.
 
-```sh
-make lint
-make lint DIR=problems/leetcode/0001-two-sum
-```
+## 🧩 Supported platforms & languages
 
-Regenerate the problem index table below:
+| Platforms  | Languages                                              |
+|------------|----------------------------------------------------------|
+| LeetCode, Codeforces, Other/custom | Go, Python, JavaScript, TypeScript, C++, Rust |
 
-```sh
-make index
-```
+## 📚 Documentation
 
-Supported languages: Go, Python, JavaScript, TypeScript, C++, Rust. Test/lint
-commands skip gracefully (with a message) if the relevant toolchain isn't
-installed locally; CI installs all of them.
+- [`USAGE.md`](USAGE.md) — complete usage guide, start to finish
+- [`problems/README.md`](problems/README.md) — directory layout & naming conventions
+- [`patterns/README.md`](patterns/README.md) — pattern/technique cross-reference index
 
 ## Problem Index
 
