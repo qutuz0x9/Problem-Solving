@@ -1,0 +1,20 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Go
+/dist/
+
+# C++/Rust build artifacts
+*.o
+*.out
+target/
+
+# Editor
+.vscode/
+.idea/
