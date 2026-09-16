@@ -1,8 +1,9 @@
 # Problem-Solving
 
 A personal, multi-language workspace for practicing coding problems — LeetCode,
-Codeforces, and custom/company interview questions — with automated scaffolding,
-per-language testing and linting, benchmarks, and an auto-generated problem index.
+Codeforces, Codewars, and custom/company interview questions — with automated
+scaffolding, per-language testing and linting, benchmarks, and an auto-generated
+problem index.
 
 ## ✨ Features
 
@@ -22,10 +23,11 @@ per-language testing and linting, benchmarks, and an auto-generated problem inde
 
 ## 📁 Project structure
 
-```
+```txt
 problems/            # solved problems, organized by platform
   leetcode/<slug>/    # e.g. 0001-two-sum
   codeforces/<slug>/  # e.g. 4a-watermelon
+  codewars/<slug>/    # e.g. multiply-numbers
   other/<slug>/       # company/custom questions
 patterns/             # cross-reference index of problem-solving techniques
 helpers/              # scaffold script, test/lint dispatch, index generator, templates
@@ -46,9 +48,9 @@ real tests, running benchmarks, troubleshooting, etc.), see **[`USAGE.md`](USAGE
 
 ## 🧩 Supported platforms & languages
 
-| Platforms  | Languages                                              |
-|------------|----------------------------------------------------------|
-| LeetCode, Codeforces, Other/custom | Go, Python, JavaScript, TypeScript, C++, Rust |
+| Platforms                                     | Languages                                        |
+|------------------------------------------------|--------------------------------------------------|
+| LeetCode, Codeforces, Codewars, Other/custom   | Go, Python, JavaScript, TypeScript, C++, Rust    |
 
 ## 📚 Documentation
 
@@ -61,5 +63,6 @@ real tests, running benchmarks, troubleshooting, etc.), see **[`USAGE.md`](USAGE
 <!-- PROBLEM_INDEX:START -->
 | Platform | Problem | Language |
 |---|---|---|
+| codewars | [Multiply Numbers](problems/codewars/multiply-numbers) | Python |
 | leetcode | [Two Sum](problems/leetcode/0001-two-sum) | Go |
 <!-- PROBLEM_INDEX:END -->

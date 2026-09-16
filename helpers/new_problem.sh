@@ -4,6 +4,7 @@
 # Usage:
 #   helpers/new_problem.sh PLATFORM=leetcode LANG=go NUM=0001 NAME=two-sum [URL=https://...] [TITLE="Two Sum"]
 #   helpers/new_problem.sh PLATFORM=codeforces LANG=python NUM=4a NAME=watermelon
+#   helpers/new_problem.sh PLATFORM=codewars LANG=python NAME=multiply-numbers
 #   helpers/new_problem.sh PLATFORM=other LANG=rust NAME=acme-rotate-array
 #
 # Typically invoked via `make new PLATFORM=... LANG=... NAME=... [NUM=...]`.
@@ -36,7 +37,7 @@ done
 
 usage() {
   cat >&2 <<EOF
-Usage: $0 PLATFORM=<leetcode|codeforces|other> LANG=<go|python|javascript|typescript|cpp|rust> NAME=<slug> [NUM=<id>] [URL=<url>] [TITLE=<title>]
+Usage: $0 PLATFORM=<leetcode|codeforces|codewars|other> LANG=<go|python|javascript|typescript|cpp|rust> NAME=<slug> [NUM=<id>] [URL=<url>] [TITLE=<title>]
 EOF
 }
 
@@ -46,9 +47,9 @@ if [[ -z "$PLATFORM" || -z "$LANG" || -z "$NAME" ]]; then
 fi
 
 case "$PLATFORM" in
-  leetcode|codeforces|other) ;;
+  leetcode|codeforces|codewars|other) ;;
   *)
-    echo "Invalid PLATFORM '$PLATFORM' (expected leetcode|codeforces|other)" >&2
+    echo "Invalid PLATFORM '$PLATFORM' (expected leetcode|codeforces|codewars|other)" >&2
     exit 1
     ;;
 esac
@@ -86,7 +87,7 @@ case "$PLATFORM" in
     NUM_LOWER="$(echo "$NUM" | tr '[:upper:]' '[:lower:]')"
     SLUG="${NUM_LOWER}-${SLUG_NAME}"
     ;;
-  other)
+  codewars|other)
     SLUG="${SLUG_NAME}"
     ;;
 esac

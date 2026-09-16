@@ -16,6 +16,7 @@ For quick reference see also:
 problems/
   leetcode/<slug>/     # LeetCode problems, slug = NNNN-kebab-title
   codeforces/<slug>/   # Codeforces problems, slug = <contest+letter>-kebab-title
+  codewars/<slug>/     # Codewars kata, slug = freeform kebab-case kata name
   other/<slug>/        # Company/custom questions, slug = freeform kebab-case
 patterns/
   README.md            # index of techniques -> links to problems that use them
@@ -59,10 +60,12 @@ everything is checked on every push/PR regardless of what you have locally.
 
 ### Step 1 — Decide platform, language, and identifiers
 
-- **Platform**: `leetcode`, `codeforces`, or `other`.
+- **Platform**: `leetcode`, `codeforces`, `codewars`, or `other`.
 - **Language**: `go`, `python`, `javascript`, `typescript`, `cpp`, or `rust`.
 - **NUM** is *required* for `leetcode` (the problem number, e.g. `1` or `0001`)
-  and for `codeforces` (contest+letter, e.g. `4a`). Not used for `other`.
+  and for `codeforces` (contest+letter, e.g. `4a`). Not used for `codewars` or
+  `other` — Codewars kata don't have numeric IDs, so note the kata's kyu rank
+  in the generated README's Difficulty field instead (e.g. `6 kyu`).
 - **NAME** is the problem slug/title source (e.g. `two-sum`); it gets lowercased
   and normalized to kebab-case automatically.
 
@@ -75,6 +78,9 @@ make new PLATFORM=leetcode LANG=go NUM=1 NAME=two-sum URL=https://leetcode.com/p
 # Codeforces — slug becomes 4a-watermelon
 make new PLATFORM=codeforces LANG=python NUM=4a NAME=watermelon
 
+# Codewars — slug becomes multiply-numbers (no NUM needed)
+make new PLATFORM=codewars LANG=python NAME=multiply-numbers URL=https://www.codewars.com/kata/... TITLE="Multiply Numbers"
+
 # Other/custom — slug becomes acme-rotate-array (no NUM needed)
 make new PLATFORM=other LANG=rust NAME=acme-rotate-array
 ```
@@ -83,7 +89,7 @@ Arguments:
 
 | Arg        | Required | Notes                                                             |
 |------------|----------|--------------------------------------------------------------------|
-| `PLATFORM` | yes      | `leetcode` \| `codeforces` \| `other`                              |
+| `PLATFORM` | yes      | `leetcode` \| `codeforces` \| `codewars` \| `other`                |
 | `LANG`     | yes      | `go` \| `python` \| `javascript` \| `typescript` \| `cpp` \| `rust` |
 | `NAME`     | yes      | freeform; normalized to kebab-case                                 |
 | `NUM`      | leetcode/codeforces only | leetcode: any int, zero-padded to 4 digits; codeforces: e.g. `4a` |
@@ -284,7 +290,7 @@ and add it to the index in `patterns/README.md`.
   existing problem folder; choose a different `NAME`/`NUM` or delete the old
   folder first.
 - **`NUM is required for PLATFORM=leetcode/codeforces`** — pass `NUM=...`; it's
-  optional only for `PLATFORM=other`.
+  optional for `PLATFORM=codewars` and `PLATFORM=other`.
 - **`skip (<tool> not installed): <path>`** — the test/lint runner detected a
   missing toolchain and skipped that problem instead of failing; install the
   toolchain locally, or rely on CI which installs everything.
