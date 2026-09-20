@@ -1,0 +1,12 @@
+// Markdown lint rules, shared by `make docs` (markdownlint-cli2) and the VS Code
+// markdownlint extension, so the editor and the command line agree.
+// Rule reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+{
+  "default": true,
+
+  // Line length is off: tables and links are wider than any sensible limit.
+  "MD013": false,
+
+  // Tables use padded, aligned columns (see .claude/rules/markdown.md).
+  "MD060": { "style": "aligned" }
+}

@@ -13,6 +13,7 @@
     "eslint": "^10.11.0",
     "globals": "^17.12.0",
     "jest": "^30.5.2",
+    "markdownlint-cli2": "^0.23.3",
     "prettier": "^3.9.8",
     "ts-jest": "^29.4.12",
     "ts-node": "^10.9.2",

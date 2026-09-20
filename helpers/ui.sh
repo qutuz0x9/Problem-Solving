@@ -65,6 +65,7 @@ badge() {
     typescript) color="$BLUE" ;;
     cpp) color="$MAGENTA" ;;
     rust) color="$RED" ;;
+    markdown) color="$GREEN" ;;
     *) color="$RESET" ;;
   esac
   printf '%s%-10s%s' "$color" "$1" "$RESET"
@@ -95,12 +96,14 @@ skip() {
     "$YELLOW" "$ICON_SKIP" "$RESET" "$(badge "$lang")" "$rel" "$DIM" "$reason" "$RESET"
 }
 
-# run_step <lang> <problem dir> <shell command>
+# run_step <lang> <problem dir> <shell command> [label]
 # Runs the command inside the problem dir, captures its output, and prints a
 # one-line result. Output is shown in full only on failure (or with VERBOSE=1).
+# The line shows the problem dir, or [label] when one is given.
 run_step() {
   local lang="$1" dir="$2" cmd="$3"
   local rel="${dir#"$REPO_ROOT"/}"
+  [[ -n "${4:-}" ]] && rel="$4"
   local out="$WORK_DIR/out.txt"
   local start end elapsed status
 

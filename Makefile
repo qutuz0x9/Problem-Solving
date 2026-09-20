@@ -5,6 +5,7 @@
 #   make test [DIR=problems/leetcode/0001-two-sum]
 #   make lint [DIR=problems/leetcode/0001-two-sum]
 #   make bench [DIR=problems/leetcode/0001-two-sum]
+#   make docs [FIX=1] [FILE=README.md]
 #   make index
 
 include helpers/makefile

@@ -43,3 +43,6 @@ jobs:
 
       - name: Run lint
         run: make lint
+
+      - name: Check docs
+        run: make docs
