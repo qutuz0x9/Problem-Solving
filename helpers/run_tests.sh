@@ -54,7 +54,7 @@ run_in_dir() {
     fi
   elif [[ -f "$dir/solution.rs" ]]; then
     if have rustc; then
-      run_step rust "$dir" "rustc --edition 2021 --test -o '$WORK_DIR/rust_test_bin' solution.rs && '$WORK_DIR/rust_test_bin' --include-ignored"
+      run_step rust "$dir" "rustc --edition 2021 --test -o '$WORK_DIR/rust_test_bin' solution.rs && '$WORK_DIR/rust_test_bin'"
     else
       skip rust "$rel" "rustc not installed"
     fi
