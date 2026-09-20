@@ -112,13 +112,30 @@ case "$PACKAGE" in
   [0-9]*) PACKAGE="p_${PACKAGE}" ;;
 esac
 
+# Escape the characters that are special in a sed replacement (/, & and \).
+sed_escape() { printf '%s' "$1" | sed -e 's/[\/&\\]/\\&/g'; }
+
 render() {
   local src="$1" dst="$2"
-  sed \
-    -e "s/{{TITLE}}/${TITLE//\//\\/}/g" \
+  local title url
+  title="$(sed_escape "$TITLE")"
+  url="$(sed_escape "$URL")"
+  # With no URL, drop lines that hold only the URL (e.g. "// {{URL}}") instead
+  # of leaving a comment with trailing whitespace, which gofmt/rustfmt reject.
+  local drop_empty_url=()
+  if [[ -z "$URL" ]]; then
+    drop_empty_url=(
+      -e '/^[[:space:]]*{{URL}}[[:space:]]*$/d'
+      -e '/^[[:space:]]*\/\/ *{{URL}}[[:space:]]*$/d'
+      -e '/^[[:space:]]*\/\/! *{{URL}}[[:space:]]*$/d'
+      -e '/^[[:space:]]*\* *{{URL}}[[:space:]]*$/d'
+    )
+  fi
+  sed "${drop_empty_url[@]}" \
+    -e "s/{{TITLE}}/${title}/g" \
     -e "s/{{PLATFORM}}/${PLATFORM}/g" \
     -e "s/{{LANGUAGE}}/${LANG}/g" \
-    -e "s/{{URL}}/${URL//\//\\/}/g" \
+    -e "s/{{URL}}/${url}/g" \
     -e "s/{{PACKAGE}}/${PACKAGE}/g" \
     "$src" > "$dst"
 }

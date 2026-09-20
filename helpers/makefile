@@ -2,12 +2,16 @@
 
 .PHONY: new test lint index
 
+# Shell-quote a value (single quotes, with embedded ' escaped) so titles and
+# URLs containing spaces, &, ?, etc. reach the script as one argument.
+shq = '$(subst ','\'',$(1))'
+
 new:
 	@if [ -z "$(PLATFORM)" ] || [ -z "$(LANG)" ] || [ -z "$(NAME)" ]; then \
 		echo "Usage: make new PLATFORM=<leetcode|codeforces|codewars|other> LANG=<go|python|javascript|typescript|cpp|rust> NAME=<slug> [NUM=<id>] [URL=<url>] [TITLE=<title>]"; \
 		exit 1; \
 	fi
-	@helpers/new_problem.sh PLATFORM=$(PLATFORM) LANG=$(LANG) NAME=$(NAME) $(if $(NUM),NUM=$(NUM)) $(if $(URL),URL=$(URL)) $(if $(TITLE),TITLE=$(TITLE))
+	@helpers/new_problem.sh PLATFORM=$(call shq,$(PLATFORM)) LANG=$(call shq,$(LANG)) NAME=$(call shq,$(NAME)) $(if $(NUM),NUM=$(call shq,$(NUM))) $(if $(URL),URL=$(call shq,$(URL))) $(if $(TITLE),TITLE=$(call shq,$(TITLE)))
 
 test:
 	@helpers/run_tests.sh $(DIR)
