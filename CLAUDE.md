@@ -58,6 +58,13 @@ make index                                   # regenerate README.md's Problem In
 - `.claude/skills/git-commit/` — the `/git-commit` skill: writes a Conventional Commits message
   from the staged changes and only commits after you approve the exact message. Scopes are
   derived from paths (`leetcode`, `codewars`, `patterns`, `helpers`, `ci`, `docs`, `claude`, `lint`).
+- `.claude/agents/` — custom subagents for the problem workflow: `hint-coach` (hints only, never
+  the solution), `solution-reviewer` (read-only review + `make test`/`make lint`), `test-writer`
+  (replaces the placeholder test with real cases), and `problem-documenter` (README TODOs,
+  `patterns/` link, `make index`). None of them commit.
+- `.claude/skills/problem-readme/` — the `/problem-readme <url> [lang]` skill: fetches a problem via
+  `helpers/fetch_problem.py` (LeetCode GraphQL, Codewars API, Codeforces metadata only), runs `make new`,
+  and fills the README (paraphrased statement, verbatim examples/constraints; Approach/Complexity stay TODO).
 - `.github/workflows/ci.yml` is the only thing under `.github/`.
 
 ## Adding a solved problem (typical flow)
