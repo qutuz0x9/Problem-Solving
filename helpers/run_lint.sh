@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Lint one or all problem directories, dispatching by language.
 # Skips (with a warning) if the required linter isn't installed locally.
+# Colors, VERBOSE and NO_COLOR/FORCE_COLOR are documented in helpers/ui.sh.
 #
 # Usage:
 #   helpers/run_lint.sh
@@ -10,59 +11,54 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="${1:-$REPO_ROOT/problems}"
 
-FAILED=0
-
-have() { command -v "$1" >/dev/null 2>&1; }
+# shellcheck source=helpers/ui.sh
+source "$REPO_ROOT/helpers/ui.sh"
 
 lint_dir() {
   local dir="$1"
   local rel="${dir#"$REPO_ROOT"/}"
+  local color="never"
+  [[ -n "$GREEN" ]] && color="always"
 
   if [[ -f "$dir/go.mod" ]]; then
     if have golangci-lint; then
-      echo "== golangci-lint: $rel =="
-      (cd "$dir" && golangci-lint run ./...) || FAILED=1
+      run_step go "$dir" "golangci-lint run --color $color ./..."
     elif have gofmt; then
-      echo "== gofmt -l: $rel =="
-      local out
-      out="$(gofmt -l "$dir")"
-      if [[ -n "$out" ]]; then
-        echo "$out"
-        FAILED=1
-      fi
+      # gofmt -l exits 0 even when files need formatting, so fail on any output.
+      run_step go "$dir" 'out="$(gofmt -l .)"; [ -z "$out" ] || { echo "needs gofmt:"; echo "$out"; exit 1; }'
     else
-      echo "skip (golangci-lint/gofmt not installed): $rel"
+      skip go "$rel" "golangci-lint/gofmt not installed"
     fi
   elif [[ -f "$dir/solution.py" ]]; then
     if have ruff; then
-      echo "== ruff: $rel =="
-      (cd "$dir" && ruff check .) || FAILED=1
+      run_step python "$dir" "ruff check --color $color ."
     else
-      echo "skip (ruff not installed): $rel"
+      skip python "$rel" "ruff not installed"
     fi
   elif [[ -f "$dir/solution.js" || -f "$dir/solution.ts" ]]; then
+    local lang="javascript"
+    [[ -f "$dir/solution.ts" ]] && lang="typescript"
     if have npx; then
-      echo "== eslint: $rel =="
-      (cd "$REPO_ROOT" && npx --yes eslint "$dir") || FAILED=1
+      run_step "$lang" "$dir" "cd '$REPO_ROOT' && npx --yes eslint --color '$dir'"
     else
-      echo "skip (eslint/npx not installed): $rel"
+      skip "$lang" "$rel" "eslint/npx not installed"
     fi
   elif [[ -f "$dir/solution.cpp" ]]; then
     if have clang-format; then
-      echo "== clang-format --dry-run: $rel =="
-      (cd "$dir" && clang-format --dry-run --Werror solution.cpp solution.h test.cpp benchmark.cpp) || FAILED=1
+      run_step cpp "$dir" "clang-format --dry-run --Werror solution.cpp solution.h test.cpp benchmark.cpp"
     else
-      echo "skip (clang-format not installed): $rel"
+      skip cpp "$rel" "clang-format not installed"
     fi
   elif [[ -f "$dir/solution.rs" ]]; then
     if have rustfmt; then
-      echo "== rustfmt --check: $rel =="
-      (cd "$dir" && rustfmt --check solution.rs) || FAILED=1
+      run_step rust "$dir" "rustfmt --check --color $color solution.rs"
     else
-      echo "skip (rustfmt not installed): $rel"
+      skip rust "$rel" "rustfmt not installed"
     fi
   fi
 }
+
+ui_header "Running lint"
 
 if [[ -f "$TARGET/solution.go" || -f "$TARGET/solution.py" || -f "$TARGET/solution.js" || -f "$TARGET/solution.ts" || -f "$TARGET/solution.cpp" || -f "$TARGET/solution.rs" ]]; then
   lint_dir "$TARGET"
@@ -72,4 +68,4 @@ else
   done < <(find "$TARGET" -type f -name 'solution.*' -exec dirname {} \; | sort -u | tr '\n' '\0')
 fi
 
-exit "$FAILED"
+ui_summary "lint checks"

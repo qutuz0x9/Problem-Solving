@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Run tests for one or all problem directories, dispatching by language.
 # Skips (with a warning) if the required toolchain isn't installed locally.
+# Colors, VERBOSE and NO_COLOR/FORCE_COLOR are documented in helpers/ui.sh.
 #
 # Usage:
 #   helpers/run_tests.sh                 # run tests for every problem
@@ -10,10 +11,8 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="${1:-$REPO_ROOT/problems}"
 
-FAILED=0
-RAN=0
-
-have() { command -v "$1" >/dev/null 2>&1; }
+# shellcheck source=helpers/ui.sh
+source "$REPO_ROOT/helpers/ui.sh"
 
 run_in_dir() {
   local dir="$1"
@@ -21,58 +20,48 @@ run_in_dir() {
 
   if [[ -f "$dir/go.mod" ]]; then
     if have go; then
-      echo "== go test: $rel =="
-      (cd "$dir" && go test ./...) || FAILED=1
-      RAN=1
+      run_step go "$dir" "go test ./..."
     else
-      echo "skip (go not installed): $rel"
+      skip go "$rel" "go not installed"
     fi
   elif [[ -f "$dir/test_solution.py" ]]; then
+    local color_flag=""
+    [[ -n "$GREEN" ]] && color_flag="--color=yes"
     if have pytest; then
-      echo "== pytest: $rel =="
-      (cd "$dir" && pytest -q) || FAILED=1
-      RAN=1
+      run_step python "$dir" "pytest -q $color_flag"
     elif have python3; then
-      echo "== python3 -m pytest: $rel =="
-      (cd "$dir" && python3 -m pytest -q) || FAILED=1
-      RAN=1
+      run_step python "$dir" "python3 -m pytest -q $color_flag"
     else
-      echo "skip (python/pytest not installed): $rel"
+      skip python "$rel" "python/pytest not installed"
     fi
   elif [[ -f "$dir/solution.test.js" ]]; then
     if have npx; then
-      echo "== jest: $rel =="
-      (cd "$dir" && npx --yes jest --config '{}' solution.test.js) || FAILED=1
-      RAN=1
+      run_step javascript "$dir" "npx --yes jest --config '{}' solution.test.js"
     else
-      echo "skip (node/npx not installed): $rel"
+      skip javascript "$rel" "node/npx not installed"
     fi
   elif [[ -f "$dir/solution.test.ts" ]]; then
     if have npx; then
-      echo "== ts-jest: $rel =="
-      (cd "$dir" && npx --yes jest --config '{"preset":"ts-jest"}' solution.test.ts) || FAILED=1
-      RAN=1
+      run_step typescript "$dir" "npx --yes jest --config '{\"preset\":\"ts-jest\"}' solution.test.ts"
     else
-      echo "skip (node/npx not installed): $rel"
+      skip typescript "$rel" "node/npx not installed"
     fi
   elif [[ -f "$dir/test.cpp" ]]; then
     if have g++; then
-      echo "== g++ test: $rel =="
-      (cd "$dir" && g++ -std=c++17 -o /tmp/test_bin test.cpp solution.cpp && /tmp/test_bin) || FAILED=1
-      RAN=1
+      run_step cpp "$dir" "g++ -std=c++17 -o '$WORK_DIR/test_bin' test.cpp solution.cpp && '$WORK_DIR/test_bin'"
     else
-      echo "skip (g++ not installed): $rel"
+      skip cpp "$rel" "g++ not installed"
     fi
   elif [[ -f "$dir/solution.rs" ]]; then
     if have rustc; then
-      echo "== rustc --test: $rel =="
-      (cd "$dir" && rustc --edition 2021 --test -o /tmp/rust_test_bin solution.rs && /tmp/rust_test_bin --include-ignored) || FAILED=1
-      RAN=1
+      run_step rust "$dir" "rustc --edition 2021 --test -o '$WORK_DIR/rust_test_bin' solution.rs && '$WORK_DIR/rust_test_bin' --include-ignored"
     else
-      echo "skip (rustc not installed): $rel"
+      skip rust "$rel" "rustc not installed"
     fi
   fi
 }
+
+ui_header "Running tests"
 
 if [[ -f "$TARGET/solution.go" || -f "$TARGET/solution.py" || -f "$TARGET/solution.js" || -f "$TARGET/solution.ts" || -f "$TARGET/solution.cpp" || -f "$TARGET/solution.rs" ]]; then
   run_in_dir "$TARGET"
@@ -82,8 +71,4 @@ else
   done < <(find "$TARGET" -type f -name 'solution.*' -exec dirname {} \; | sort -u | tr '\n' '\0')
 fi
 
-if [[ "$RAN" -eq 0 ]]; then
-  echo "No tests ran (no problems found or no toolchains installed)."
-fi
-
-exit "$FAILED"
+ui_summary "tests"
