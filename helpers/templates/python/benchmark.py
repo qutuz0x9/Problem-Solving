@@ -8,7 +8,8 @@ import time
 
 from solution import solve
 
-SIZES = [10, 1_000, 100_000]  # input sizes to measure (lower them for slow solutions)
+# Input sizes to measure, 10x apart so the growth is easy to see (lower them for slow solutions).
+SIZES = [10, 100, 1_000, 10_000, 100_000]
 REPEATS = 7  # timed runs per size; the minimum and the median are reported
 
 
@@ -33,7 +34,10 @@ def measure(n):
 
 
 if __name__ == "__main__":
-    print(f"{'size':<12}{'min ms':>12}{'median ms':>14}")
+    print(f"{'size':<12}{'min ms':>12}{'median ms':>14}{'growth':>10}")
+    previous = 0.0
     for n in SIZES:
         fastest, median = measure(n)
-        print(f"{n:<12}{fastest:>12.6f}{median:>14.6f}")
+        growth = f"x{fastest / previous:.1f}" if previous > 0 else "-"  # vs the previous size
+        print(f"{n:<12}{fastest:>12.6f}{median:>14.6f}{growth:>10}")
+        previous = fastest

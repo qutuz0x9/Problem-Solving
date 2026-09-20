@@ -276,12 +276,12 @@ claims.
 
 **Reads** the README (constraints and Complexity), the solution and the benchmark file. **Changes only the benchmark
 file.** It fills in the input builder for size `n` (a worst-case, deterministic input matched to `solve`'s
-signature), adjusts the sizes (default 10, 1,000 and 100,000; lower for slow solutions), makes sure the compiler
+signature), adjusts the sizes (default 10, 100, 1,000, 10,000 and 100,000; lower for slow solutions), makes sure the compiler
 cannot delete the timed call, then runs `make bench DIR=...` two or three times. To compare approaches it puts the
 alternatives inside the benchmark file and never edits your solution.
 
-**How it reads the numbers:** for a 100x larger input, `O(n)` should take about 100x longer, `O(n log n)` about
-130-150x, and `O(n^2)` about 10,000x. It flags a mismatch with your README's claim, and ignores the smallest size
+**How it reads the numbers:** in the `growth` column (each size is 10x the last), `O(n)` should show about x10,
+`O(n log n)` about x12-15, and `O(n^2)` about x100. It flags a mismatch with your README's claim, and ignores the smallest size
 when timer noise dominates. It never reports a number it did not see: if a toolchain is missing it says the
 benchmark did not run.
 
@@ -303,12 +303,14 @@ benchmark did not run.
 Input: n distinct values (worst case for the hash map: nothing repeats), k = n / 2, built once per size.
 Edited: problems/leetcode/0219-contains-duplicate-ii/benchmark.cpp (input builder, result kept alive with Keep()).
 
-  size            min ms     median ms
-  10            0.000900      0.001000
-  1000          0.062000      0.064000
-  100000        6.800000      6.900000
+  size            min ms     median ms    growth
+  10            0.000900      0.001000         -
+  100           0.007000      0.007200      x7.8
+  1000          0.062000      0.064000      x8.9
+  10000         0.660000      0.670000     x10.6
+  100000        6.800000      6.900000     x10.3
 
-Growth from 1,000 to 100,000: about 110x for 100x more input. Claimed complexity: O(n), which predicts about 100x.
+Growth per 10x step: about x10 at the larger sizes. Claimed complexity: O(n), which predicts about x10.
 The smallest size is timer noise, so I ignored it. Ran 3 times; results agreed within 5%.
 Verdict: the timings match the O(n) claim in the README.
 ```

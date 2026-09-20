@@ -26,7 +26,7 @@ ask the user to add them to the solution) instead of editing the solution yourse
 ## What to write
 
 Every benchmark template has the same shape: a list of sizes, a warmup, several timed runs, and a table of the minimum
-and median time. Fill in:
+and median time plus a `growth` column (the minimum time versus the previous size). Fill in:
 
 1. **The input builder for size `n`** (the `TODO` spot), matching the signature of `solve`:
    - Use the constraints in the README to choose realistic value ranges and the largest useful size.
@@ -34,8 +34,9 @@ and median time. Fill in:
      an already-sorted array for a naive sort, or a graph that is one long chain), and say what you chose.
    - Generate it deterministically (fixed seed or arithmetic patterns) so runs are comparable.
    - If `solve` changes or consumes its input, build a fresh copy inside the timed loop, and say so.
-2. **The sizes**: keep 10, 1,000 and 100,000 unless the constraints or the complexity say otherwise. Lower them for
-   quadratic or slower solutions so a run finishes in seconds, and raise them up to the README's maximum for fast ones.
+2. **The sizes**: keep 10, 100, 1,000, 10,000 and 100,000 (each 10x the last) unless the constraints or the complexity
+   say otherwise. Lower them for quadratic or slower solutions so a run finishes in seconds, and raise them up to the
+   README's maximum for fast ones.
 3. **The call**: pass the input to `solve(...)`, and keep the result alive so the compiler cannot delete the call
    (`Keep(...)` in C++, `black_box(...)` in Rust, a package-level `sink` in Go).
 
@@ -50,8 +51,8 @@ the benchmark did not run instead of inventing numbers. Never report a number yo
 
 ## Interpreting the results
 
-- Compare how the time grows between sizes with the README's Complexity claim. For a 100x larger `n`, an `O(n)`
-  solution should take about 100x longer, `O(n log n)` about 130-150x, and `O(n^2)` about 10,000x.
+- Compare how the time grows between sizes with the README's Complexity claim. Read the `growth` column: for a 10x
+  larger `n`, an `O(n)` solution should show about x10, `O(n log n)` about x12-15, and `O(n^2)` about x100.
 - Flag a mismatch (for example a claimed `O(n)` that grows quadratically), and point at the likely cause.
 - Ignore the smallest size when it is dominated by timer noise or startup, and say so.
 - Compare alternatives on the same input and sizes, and report the ratio.

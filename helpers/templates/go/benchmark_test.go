@@ -14,7 +14,7 @@ func makeInput(n int) []int {
 // BenchmarkSolve runs Solve on inputs of several sizes. Run it with
 // `make bench DIR=problems/<platform>/<slug>` (or `go test -bench=. -run='^$'`).
 func BenchmarkSolve(b *testing.B) {
-	for _, n := range []int{10, 1000, 100000} {
+	for _, n := range []int{10, 100, 1000, 10000, 100000} {
 		in := makeInput(n)
 		b.Run(fmt.Sprintf("n=%d", n), func(b *testing.B) {
 			_ = in // TODO: pass `in` to Solve(...)

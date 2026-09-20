@@ -294,9 +294,10 @@ make bench                                        # every problem (can be slow)
 ```
 
 Every problem has a benchmark file with the same shape in all six languages.
-It builds an input of several sizes (default `10`, `1000` and `100000`, the
-`SIZES` list at the top), does one warmup call, times several runs, and prints
-the fastest and the median time per size. Go uses its own `b.Run` sub-benchmarks
+It builds an input of several sizes (default `10`, `100`, `1000`, `10000` and
+`100000`, the `SIZES` list at the top, each 10x the last), does one warmup call,
+times several runs, and prints the fastest and the median time per size, plus a
+`growth` column: the fastest time divided by the previous size's. Go uses its own `b.Run` sub-benchmarks
 and prints `ns/op` and allocations instead.
 
 To benchmark a problem:
@@ -314,22 +315,25 @@ Example output (Python):
 ▶ Running benchmarks
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ✓ DONE  python      problems/leetcode/0001-two-sum  0.05s
-      │ size              min ms     median ms
-      │ 10              0.000400      0.000500
-      │ 1000            0.020300      0.020600
-      │ 100000          2.354400      2.396700
+      │ size              min ms     median ms    growth
+      │ 10              0.000400      0.000500         -
+      │ 100             0.002400      0.002500      x6.0
+      │ 1000            0.020300      0.020600      x8.5
+      │ 10000           0.235000      0.240000     x11.6
+      │ 100000          2.354400      2.396700     x10.0
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  ✓ 1 completed   ✗ 0 failed   ○ 0 skipped   0.06s
 
 All benchmarks completed.
 ```
 
-Read the table by comparing rows: for a 100x larger input, an `O(n)` solution
-should take about 100x longer, `O(n log n)` about 130-150x, and `O(n^2)` about
-10,000x. Compare that with the Complexity section of your README. Timings are
-noisy, so run it a few times and trust the minimum more than the median. In
-Claude Code, the `benchmark-runner` agent can write the input builder for you
-and check the growth against your complexity claim.
+Read the `growth` column: each size is 10x the one above it, so an `O(n)` solution
+should show about `x10`, `O(n log n)` about `x12`-`x15`, and `O(n^2)` about `x100`. Compare
+that with the Complexity section of your README. The smallest sizes are dominated by
+timer noise, so judge the trend from the larger ones. Timings are noisy, so run it a
+few times and trust the minimum more than the median. In Claude Code, the
+`benchmark-runner` agent can write the input builder for you and check the growth
+against your complexity claim.
 
 The benchmark output is always shown (unlike `make test`). What runs underneath:
 
