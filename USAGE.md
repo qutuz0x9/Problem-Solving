@@ -263,7 +263,9 @@ All tests passed.
 - A problem whose toolchain is missing prints `○ SKIP  <lang>  <path>  (<reason>)`
   and does not count as a failure.
 
-Output options (environment variables, work for `make test` and `make lint`):
+Output options (environment variables; they work for `make test`, `make lint`
+and `make bench`, except that `VERBOSE` has no effect on `make bench`, which
+always shows its output):
 
 | Variable         | Effect                                                                 |
 |------------------|------------------------------------------------------------------------|
@@ -273,7 +275,7 @@ Output options (environment variables, work for `make test` and `make lint`):
 
 For example: `VERBOSE=1 make test DIR=problems/leetcode/0001-two-sum`. If the
 terminal isn't UTF-8, the icons fall back to `ok`, `x` and `-`. To restyle the
-output (colors, icons, layout), edit `helpers/ui.sh`, which both commands share.
+output (colors, icons, layout), edit `helpers/ui.sh`, which all three commands share.
 
 ### Step 8 — Run the benchmark
 
@@ -322,14 +324,14 @@ and check the growth against your complexity claim.
 
 The benchmark output is always shown (unlike `make test`). What runs underneath:
 
-| Language   | Command used by `make bench`                                        |
-|------------|---------------------------------------------------------------------|
-| Go         | `go test -bench=. -benchmem -run='^$'`                              |
-| Python     | `python3 benchmark.py`                                              |
-| JavaScript | `node benchmark.js`                                                 |
+| Language   | Command used by `make bench`                                           |
+|------------|------------------------------------------------------------------------|
+| Go         | `go test -bench=. -benchmem -run='^$'`                                 |
+| Python     | `python3 benchmark.py`                                                 |
+| JavaScript | `node benchmark.js`                                                    |
 | TypeScript | `npx ts-node benchmark.ts` (needs `npm install` once in the repo root) |
-| C++        | `g++ -std=c++17 -O2 benchmark.cpp solution.cpp`, then run it        |
-| Rust       | `rustc --edition 2021 -O benchmark.rs`, then run it                 |
+| C++        | `g++ -std=c++17 -O2 benchmark.cpp solution.cpp`, then run it           |
+| Rust       | `rustc --edition 2021 -O benchmark.rs`, then run it                    |
 
 C++ and Rust binaries are built in a temporary directory that is removed
 afterwards. You can also run a benchmark by hand from inside the problem folder
@@ -496,13 +498,13 @@ solving a problem. None of them commits anything on their own.
 
 **Agents** (Claude picks them when the task fits, or ask for one by name)
 
-| Agent                | Use it to...                                                                                               | Can edit files?        |
-|----------------------|------------------------------------------------------------------------------------------------------------|------------------------|
-| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                  | No (read-only)         |
-| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint | No (read-only)         |
-| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                        | Only the test file     |
-| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`            | README, `patterns/`    |
-| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim | Only the benchmark file |
+| Agent                | Use it to...                                                                                                           | Can edit files?                     |
+|----------------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
+| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                              | No (read-only)                      |
+| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint             | No (read-only)                      |
+| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                                    | Only the test file                  |
+| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`                        | README, `patterns/`                 |
+| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim | Only the benchmark file             |
 
 ### **A typical session**
 
