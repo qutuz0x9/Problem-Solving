@@ -20,6 +20,8 @@ auto-generated problem index.
   with everything under `problems/`.
 - **CI-ready** — GitHub Actions runs tests and lint across all toolchains on
   every push/PR.
+- **Docs that lint clean** — `make docs` checks every Markdown file (markdownlint rules, aligned tables, links and
+  anchors), the editor uses the same rules, and CI runs it.
 - **Optional Claude Code helpers** — build a problem's README from its URL, plus
   agents for hints, reviews, tests, docs, benchmarks and patterns.
 
@@ -37,7 +39,8 @@ helpers/               # scaffold, fetch, test/lint/bench dispatch, index genera
 .github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
 package.json           # pinned JS/TS tooling; run `npm install` once
 eslint.config.js       # ESLint flat config for JS/TS problems
-Makefile               # make new / test / lint / bench / index
+.markdownlint.jsonc     # Markdown lint rules (also read by the editor)
+Makefile               # make new / test / lint / bench / docs / index
 ```
 
 Each problem folder holds a solution file, a test file, a benchmark file and a
@@ -55,6 +58,7 @@ make test  DIR=problems/leetcode/0001-two-sum           # run its tests
 make bench DIR=problems/leetcode/0001-two-sum           # benchmark it
 make lint  DIR=problems/leetcode/0001-two-sum           # lint it
 make index                                              # refresh the index below
+make docs                                               # check the Markdown docs
 ```
 
 Leave `DIR` off to run a command for every problem. Install only the toolchains
@@ -73,9 +77,9 @@ The same ten steps as in [`USAGE.md` §3](USAGE.md#3-step-by-step-solving-a-new-
 7. **Run the tests**: `make test`.
 8. **Run the benchmark**: `make bench`.
 9. **Lint**: `make lint`.
-10. **Update the index and commit**: `make index`, then commit.
+10. **Update the index and commit**: `make index`, `make docs`, then commit.
 
-Output options for `make test`, `make lint` and `make bench`: `NO_COLOR=1`
+Output options for `make test`, `make lint`, `make bench` and `make docs`: `NO_COLOR=1`
 turns colors off, `FORCE_COLOR=1` keeps them when piping, and `VERBOSE=1` also
 shows passing output for test and lint.
 
@@ -99,12 +103,14 @@ installs everything. Install commands are in
 ## 🤖 Claude Code (optional)
 
 Everything works without AI tooling. With [Claude Code](https://claude.com/claude-code),
-`.claude/` adds two skills and six agents (details in
-[`USAGE.md` §9](USAGE.md#9-working-with-claude-code-optional)); none of them commits on its own.
+`.claude/` adds three skills and six agents (details in
+[`USAGE.md` §9](USAGE.md#9-working-with-claude-code-optional) and
+[`AGENTS_USAGE.md`](AGENTS_USAGE.md)); none of them commits on its own.
 
 | Skill or agent                 | What it does                                                                        |
 |--------------------------------|-------------------------------------------------------------------------------------|
 | `/problem-readme <url> [lang]` | Fetches a problem, runs `make new`, and fills the README                            |
+| `/docs-check`                  | Checks and fixes the Markdown docs (`make docs FIX=1`), then repairs what is left   |
 | `/git-commit`                  | Writes a Conventional Commits message; you approve it before it commits             |
 | `hint-coach`                   | Gives hints without revealing the solution                                          |
 | `solution-reviewer`            | Reviews a solution (read-only) and runs test and lint                               |
@@ -113,9 +119,13 @@ Everything works without AI tooling. With [Claude Code](https://claude.com/claud
 | `benchmark-runner`             | Writes the benchmark input builder and checks growth vs your complexity claim       |
 | `pattern-tutor`                | Explains patterns with diagrams and verified C++ examples; writes `patterns/` files |
 
+Claude also follows `.claude/rules/markdown.md`, and a hook lints every Markdown file it edits and reports the
+problems back, so docs it writes pass `make docs` the first time.
+
 ## 📚 Documentation
 
 - [`USAGE.md`](USAGE.md) — complete usage guide, start to finish (includes troubleshooting)
+- [`AGENTS_USAGE.md`](AGENTS_USAGE.md) — the Claude Code agents: when to use each, examples, output shapes
 - [`problems/README.md`](problems/README.md) — directory layout & naming conventions
 - [`patterns/README.md`](patterns/README.md) — pattern/technique cross-reference index
 - [`CLAUDE.md`](CLAUDE.md) — guidance for Claude Code working in this repo

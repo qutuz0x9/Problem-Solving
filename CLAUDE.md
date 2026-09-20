@@ -16,6 +16,7 @@ make new PLATFORM=<leetcode|codeforces|codewars|other> LANG=<go|python|javascrip
 make test [DIR=problems/<platform>/<slug>]   # all problems if DIR omitted
 make lint [DIR=problems/<platform>/<slug>]   # all problems if DIR omitted
 make bench [DIR=problems/<platform>/<slug>]  # all problems if DIR omitted
+make docs [FIX=1] [FILE="a.md b.md"]         # check (or fix) Markdown: markdownlint, aligned tables, links
 make index                                   # regenerate README.md's Problem Index table
 ```
 
@@ -27,6 +28,11 @@ make index                                   # regenerate README.md's Problem In
   sizes (a marked `TODO` spot in `make_input`/`makeInput`), warms up, and prints min/median ms per
   size (Go prints `go test -bench` output). A fresh scaffold's benchmark calls `solve`, so it fails
   with the stub's `TODO` error until `solve` is implemented. See `USAGE.md` Step 8.
+- `make docs` lints every Markdown file (`helpers/run_docs.sh`): markdownlint with the rules in
+  `.markdownlint.jsonc` (shared with the editor; line length off), aligned tables, and relative links/anchors
+  (`helpers/md_tools.py`). `FIX=1` applies the automatic fixes. CI runs it. Write Markdown per
+  `.claude/rules/markdown.md`: real headings (not bold lines), a language on every code fence, `<url>` instead of
+  bare URLs, aligned tables.
 - JS/TS tooling (jest, ts-jest, eslint, ts-node, prettier) is pinned in the root `package.json`
   and lockfile; run `npm install` once. The runners use `npx --no-install`, and JS/TS problems are
   skipped (not failed) with `run 'npm install' first` if `node_modules` is missing. ESLint uses the
@@ -47,6 +53,10 @@ make index                                   # regenerate README.md's Problem In
 - `helpers/run_tests.sh` / `helpers/run_lint.sh` / `helpers/run_bench.sh` — detect a problem's language (by which solution
   file extension is present) and dispatch to the matching tool, skipping gracefully if that
   toolchain isn't installed. When run with no `DIR`, they walk every folder under `problems/`.
+- `helpers/run_docs.sh` + `helpers/md_tools.py` — the Markdown checks behind `make docs` (same UI as the other
+  runners). `.claude/hooks/md-check.sh`, wired in `.claude/settings.json`, runs them on every `.md` file Claude
+  edits and feeds the problems back; `.claude/rules/markdown.md` holds the conventions; `/docs-check` is the
+  on-demand skill.
 - `helpers/generate_index.sh` — regenerates the Problem Index table in root `README.md` between
   the `<!-- PROBLEM_INDEX:START -->` / `<!-- PROBLEM_INDEX:END -->` markers; idempotent, safe to
   re-run.
@@ -66,7 +76,8 @@ make index                                   # regenerate README.md's Problem In
   (replaces the placeholder test with real cases), and `problem-documenter` (README TODOs,
   `patterns/` link, `make index`), and `benchmark-runner` (writes the benchmark input builder, runs
   `make bench`, checks growth vs the README's complexity), and `pattern-tutor` (explains patterns
-  with diagrams and verified C++ examples; writes/audits `patterns/` files). None of them commit.
+  with diagrams and verified C++ examples; writes/audits `patterns/` files). None of them commit. `AGENTS_USAGE.md` documents how to use
+  them, with example outputs and output shapes.
 - `.claude/skills/problem-readme/` — the `/problem-readme <url> [lang]` skill: fetches a problem via
   `helpers/fetch_problem.py` (LeetCode GraphQL, Codewars API, Codeforces metadata only), runs `make new`,
   and fills the README (paraphrased statement, verbatim examples/constraints; Approach/Complexity stay TODO).
@@ -80,6 +91,6 @@ make index                                   # regenerate README.md's Problem In
 4. Replace the skipped placeholder test with real assertions.
 5. `make test DIR=problems/<platform>/<slug>` and `make lint DIR=problems/<platform>/<slug>`.
 6. If the solution uses a known pattern, add a link to it under the matching file in `patterns/`.
-7. `make index` to refresh the root README table, then commit.
+7. `make index` to refresh the root README table, `make docs` to check the Markdown, then commit.
 
 Full walkthrough with worked examples: `USAGE.md`.

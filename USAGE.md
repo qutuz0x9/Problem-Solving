@@ -6,6 +6,7 @@ README index up to date. If you only read one doc in this repo, read this one.
 
 For quick reference see also:
 
+- `AGENTS_USAGE.md` — how to use the Claude Code agents, with examples and output shapes
 - `problems/README.md` — directory layout & slug/naming conventions
 - `patterns/README.md` — cross-reference index of problem-solving techniques
 
@@ -29,11 +30,15 @@ helpers/
   run_tests.sh         # dispatches `make test` to the right test runner
   run_lint.sh          # dispatches `make lint` to the right linter
   run_bench.sh         # dispatches `make bench` to the right benchmark command
-  ui.sh                # shared colors/icons/summary used by run_tests.sh, run_lint.sh and run_bench.sh
+  run_docs.sh          # runs `make docs`: markdownlint, aligned tables, links
+  md_tools.py          # table alignment and link/anchor checks used by run_docs.sh
+  ui.sh                # shared colors/icons/summary used by run_tests.sh, run_lint.sh, run_bench.sh and run_docs.sh
   generate_index.sh    # regenerates the problem table in README.md
   makefile             # actual Makefile target logic (included by root Makefile)
 .claude/
-  skills/              # Claude Code skills: /git-commit, /problem-readme
+  skills/              # Claude Code skills: /git-commit, /problem-readme, /docs-check
+  rules/markdown.md    # Markdown conventions Claude follows when it edits a .md file
+  hooks/md-check.sh    # lints each .md file Claude edits (wired in .claude/settings.json)
   agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter, benchmark-runner, pattern-tutor
 .github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
 package.json           # pinned JS/TS tooling (jest, ts-jest, eslint, ...); run `npm install` once
@@ -43,7 +48,7 @@ Makefile               # thin wrapper: `include helpers/makefile`
 
 Lint/format settings live in the repo root: `.clang-format` (Google style, 4
 spaces, 100 columns), `ruff.toml`, `.golangci.yml` (golangci-lint v2 format),
-`rustfmt.toml`, `.prettierrc` and `eslint.config.js`.
+`rustfmt.toml`, `.prettierrc`, `eslint.config.js` and `.markdownlint.jsonc` (Markdown rules).
 
 Each problem is a self-contained folder with a solution file, a test file, a
 benchmark file, and a `README.md` describing the problem — all generated
@@ -355,6 +360,7 @@ inside the problem folder.
 
 ```sh
 make index    # regenerates the Problem Index table in README.md
+make docs     # checks the Markdown docs (see section 10)
 git add problems/<platform>/<slug> README.md patterns/
 ```
 
@@ -392,6 +398,7 @@ make lint DIR=problems/leetcode/0001-two-sum
 
 # 7. Update index and commit
 make index
+make docs
 git add problems/leetcode/0001-two-sum README.md
 git commit -m "feat(leetcode): solve 0001 two-sum in Go"
 ```
@@ -413,16 +420,17 @@ verified C++ template) and write or audit these files for you.
 
 ## 6. Makefile reference
 
-| Target       | Arguments                                                     | Description                                                 |
-|--------------|---------------------------------------------------------------|-------------------------------------------------------------|
-| `make new`   | `PLATFORM=`, `LANG=`, `NAME=`, `[NUM=]`, `[URL=]`, `[TITLE=]` | Scaffold a new problem folder from templates                |
-| `make test`  | `[DIR=<problem-path>]`                                        | Run tests for one problem, or all problems if `DIR` omitted |
-| `make lint`  | `[DIR=<problem-path>]`                                        | Lint one problem, or all problems if `DIR` omitted          |
-| `make bench` | `[DIR=<problem-path>]`                                        | Benchmark one problem, or all problems if `DIR` omitted     |
-| `make index` | —                                                             | Regenerate the Problem Index table in root `README.md`      |
+| Target       | Arguments                                                     | Description                                                  |
+|--------------|---------------------------------------------------------------|--------------------------------------------------------------|
+| `make new`   | `PLATFORM=`, `LANG=`, `NAME=`, `[NUM=]`, `[URL=]`, `[TITLE=]` | Scaffold a new problem folder from templates                 |
+| `make test`  | `[DIR=<problem-path>]`                                        | Run tests for one problem, or all problems if `DIR` omitted  |
+| `make lint`  | `[DIR=<problem-path>]`                                        | Lint one problem, or all problems if `DIR` omitted           |
+| `make bench` | `[DIR=<problem-path>]`                                        | Benchmark one problem, or all problems if `DIR` omitted      |
+| `make docs`  | `[FIX=1]`, `[FILE="a.md b.md"]`                               | Check (or fix) Markdown: markdownlint, aligned tables, links |
+| `make index` | —                                                             | Regenerate the Problem Index table in root `README.md`       |
 
-`make test`, `make lint` and `make bench` also read the environment variables
-`NO_COLOR` and `FORCE_COLOR` (and `VERBOSE` for test and lint); see Step 7.
+`make test`, `make lint`, `make bench` and `make docs` also read the environment
+variables `NO_COLOR` and `FORCE_COLOR` (and `VERBOSE` for test and lint); see Step 7.
 `make bench` always shows the benchmark output.
 
 ## 7. Troubleshooting
@@ -459,6 +467,12 @@ verified C++ template) and write or audit these files for you.
   the input builder yet, or `solve` is being called with an empty input. See Step 8.
 - **Benchmark numbers change a lot between runs** — that is normal noise. Run it a
   few times, close heavy programs, and compare the minimum column.
+- **`make docs` reports `MD036`, `MD040`, `MD034`, `MD060`, ...** — run `make docs FIX=1` for the automatic fixes,
+  then fix the rest by hand; section 10 lists the common ones. The conventions are in
+  `.claude/rules/markdown.md`.
+- **My editor and `make docs` disagree on a Markdown rule** — both read `.markdownlint.jsonc`, but the editor extension
+  can bundle a different markdownlint version. Trust `make docs` (CI runs it) and update the extension if it lags.
+- **`make docs` says `run 'npm install' first`** — markdownlint is pinned in `package.json`; run `npm install` once.
 - **Slug looks different than expected** — `NAME` is always lowercased and
   non-alphanumeric characters are collapsed to single hyphens (e.g.
   `Two Sum!!` → `two-sum`).
@@ -487,7 +501,7 @@ verified C++ template) and write or audit these files for you.
 ## 9. Working with Claude Code (optional)
 
 Everything above works without any AI tooling. If you use
-[Claude Code](https://claude.com/claude-code) in this folder, `.claude/` adds two
+[Claude Code](https://claude.com/claude-code) in this folder, `.claude/` adds three
 skills (slash commands) and six agents that automate the tedious steps around
 solving a problem. None of them commits anything on their own.
 
@@ -496,6 +510,7 @@ solving a problem. None of them commits anything on their own.
 | Command                          | What it does                                                                                     |
 |----------------------------------|--------------------------------------------------------------------------------------------------|
 | `/problem-readme <url> [lang]`   | Fetches the problem, runs `make new`, and fills the README (Step 4 shortcut)                     |
+| `/docs-check [file ...]`         | Runs `make docs FIX=1` and fixes what the automatic fixers cannot (section 10)                   |
 | `/git-commit`                    | Writes a Conventional Commits message from the staged changes; you approve the exact text first  |
 
 **Agents** (Claude picks them when the task fits, or ask for one by name)
@@ -523,6 +538,65 @@ git add problems/leetcode/0219-contains-duplicate-ii README.md patterns/
 /git-commit
 ```
 
+For each agent's prompts, what it reads and changes, its output shape and an
+example, see [`AGENTS_USAGE.md`](AGENTS_USAGE.md).
+
 Skills and agents are plain Markdown files (`.claude/skills/<name>/SKILL.md`
 and `.claude/agents/<name>.md`), so you can read and change them. They are
 loaded when Claude Code starts.
+
+## 10. Markdown docs and `make docs`
+
+The docs are linted, so they render correctly on GitHub and stay consistent. One command checks all of them:
+
+```sh
+make docs                                # check every Markdown file
+make docs FILE="README.md USAGE.md"      # check only these files
+make docs FIX=1                          # apply the automatic fixes, then check
+```
+
+It runs three checks, each shown as a `PASS` or `FAIL` line in the same layout as `make test`:
+
+| Check             | Tool                                           | What it verifies                                                        |
+|-------------------|------------------------------------------------|-------------------------------------------------------------------------|
+| markdownlint      | `markdownlint-cli2` with `.markdownlint.jsonc` | Headings, code fences, lists, bare URLs, tables, blank lines, ...       |
+| aligned tables    | `helpers/md_tools.py tables`                   | Padded columns and `\|-----\|` separators, all pipes in the same column |
+| links and anchors | `helpers/md_tools.py links`                    | Relative links point to real files and `#anchors` match a heading       |
+
+`make docs FIX=1` applies markdownlint's automatic fixes and re-aligns tables. It needs `npm install` once (markdownlint
+is pinned in `package.json`) and `python3`. CI runs `make docs` on every push.
+
+### The rules that matter most
+
+| Rule    | What it means                                             | Fix                                                          |
+|---------|-----------------------------------------------------------|--------------------------------------------------------------|
+| `MD036` | A bold line used instead of a heading                     | Make it a heading, or end it with a colon: `**Try saying:**` |
+| `MD040` | A code fence without a language                           | Add one: `sh` for commands, `txt` for output, `cpp`, ...     |
+| `MD034` | A bare URL                                                | Write `<https://example.com>` or `[text](url)`               |
+| `MD060` | Table pipes are not aligned                               | `make docs FIX=1`                                            |
+| `MD024` | The same heading text appears twice                       | Rename one of them                                           |
+| `MD032` | A list is not surrounded by blank lines                   | Add the blank lines                                          |
+
+Line length (`MD013`) is off. The full conventions, with the reasoning, are in `.claude/rules/markdown.md`.
+
+### Editor
+
+`.markdownlint.jsonc` is read by the VS Code markdownlint extension, so the squiggles in the editor and the output of
+`make docs` come from the same rules. The extension may bundle a slightly different markdownlint version; if the two
+disagree on a rule, trust `make docs`.
+
+### Generated files
+
+The Problem Index in `README.md` (written by `make index`) and the READMEs created by `make new` and `/problem-readme`
+already follow the rules: the link is written as `<https://...>` (or `TODO`), fetched examples use `txt` fences, and
+tables are aligned.
+
+### With Claude Code
+
+These are optional; the rules apply either way.
+
+- **Rule.** `.claude/rules/markdown.md` is loaded whenever Claude works on a Markdown file, so it writes them the right
+  way from the start.
+- **Hook.** `.claude/hooks/md-check.sh`, wired in `.claude/settings.json`, lints every `.md` file Claude edits or
+  writes and reports the problems back to it immediately, so Claude fixes them in the same turn.
+- **Skill.** `/docs-check [file ...]` runs `make docs FIX=1` and fixes what the automatic fixers cannot.
