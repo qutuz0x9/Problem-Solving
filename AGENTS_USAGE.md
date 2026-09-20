@@ -329,22 +329,25 @@ written, improved or checked. It has two jobs (and a quiz mode).
 - `pattern-tutor: write patterns/hash-map.md`
 - `pattern-tutor: audit patterns/`
 
-**Job 1: explain (in chat, no edits).** It uses a *different* example from the problem you are working on. If you
-ask which pattern fits a problem you have **not solved yet**, it names the pattern and its signals but does not lay
-out the algorithm (use `hint-coach` for that). If the problem is already implemented, it can discuss it freely.
+**Job 1: explain (written to `patterns/<name>.md`).** "Explain X" writes the explanation into that pattern file
+(creating it and adding it to the index, or extending it while keeping your uncommitted edits) and replies in chat
+with only a short summary and the path. Questions about one specific problem ("which pattern fits ...") and quiz mode
+stay in chat. It uses a *different* example from the problem you are working on. If you ask which pattern fits a
+problem you have **not solved yet**, it names the pattern and its signals but does not lay out the algorithm (use
+`hint-coach` for that). If the problem is already implemented, it can discuss it freely.
 
-**Output shape (explain).** No rigid template, but it covers these parts, in this order:
+**Output shape (explain).** The file has these parts, in this order (the chat reply is just a short summary):
 
 ```txt
 1. The idea, in one or two sentences
 2. Signals in the statement and constraints, and when NOT to use it
-3. A diagram (ASCII, or Mermaid for flows and graphs)
+3. Diagrams: ASCII for the data, plus a Mermaid decision-flow diagram of how the pattern works (always included)
 4. A small worked example, traced step by step
 5. A C++ template (compiled and run before it is shown)
 6. Complexity, common mistakes and edge cases, related patterns and how to tell them apart
 ```
 
-**Example (illustrative), explain:**
+**Example (illustrative), content written to the file:**
 
 ````txt
 Sliding window (fixed size)

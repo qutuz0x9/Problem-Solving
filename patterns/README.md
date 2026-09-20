@@ -20,10 +20,6 @@ different speeds) to avoid nested loops.
 
 ## Index
 
-_(Add a bullet here each time you create a new pattern file.)_
+(Add a bullet here each time you create a new pattern file.)_
 
 - [two-pointers](two-pointers.md)
-- [sliding-window](sliding-window.md)
-- [binary-search](binary-search.md)
-- [dynamic-programming](dynamic-programming.md)
-- [graphs-bfs-dfs](graphs-bfs-dfs.md)

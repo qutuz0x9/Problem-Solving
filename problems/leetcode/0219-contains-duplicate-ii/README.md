@@ -42,9 +42,11 @@ Output: false
 
 ## Approach
 
-TODO: describe your approach, complexity, and any gotchas.
+Use a hash map to track the most recent index of each value encountered so far. Iterate through the array once: for each element, check if it exists in the map and if the distance to its last occurrence is at most `k`. If so, return `true` immediately. Otherwise, update the map with the current index. If the loop completes without finding a valid pair, return `false`.
+
+The key insight is that we only care about the *last* occurrence of each value (the most recent one), not earlier ones, because we want to minimize the distance between two equal values to maximize the chance of staying within the `k` bound.
 
 ## Complexity
 
-- Time: TODO
-- Space: TODO
+- Time: O(n), where n is the length of the array. We iterate through each element once and perform O(1) hash map lookups and insertions.
+- Space: O(min(n, m)), where m is the number of distinct values in the array. The hash map stores at most one entry per distinct value.
