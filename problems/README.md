@@ -2,7 +2,7 @@
 
 Problems are organized by platform. Each problem lives in its own folder:
 
-```
+```txt
 problems/<platform>/<slug>/
   solution.<ext>
   solution_test.<ext>   (or test_solution.<ext> / solution.test.<ext>)
@@ -12,12 +12,12 @@ problems/<platform>/<slug>/
 
 ## Platforms & naming conventions
 
-| Platform    | Folder                  | Slug format                        | Example                     |
-|-------------|--------------------------|-------------------------------------|------------------------------|
-| LeetCode    | `problems/leetcode/`     | `NNNN-kebab-case-title`             | `0001-two-sum`               |
-| Codeforces  | `problems/codeforces/`   | `<contest><problem-letter>-kebab-case-title` | `4a-watermelon`     |
-| Codewars    | `problems/codewars/`     | freeform kebab-case (kata name)     | `multiply-numbers`           |
-| Other       | `problems/other/`        | freeform kebab-case                 | `acme-rotate-array`           |
+| Platform   | Folder                 | Slug format                                  | Example             |
+|------------|------------------------|----------------------------------------------|---------------------|
+| LeetCode   | `problems/leetcode/`   | `NNNN-kebab-case-title`                      | `0001-two-sum`      |
+| Codeforces | `problems/codeforces/` | `<contest><problem-letter>-kebab-case-title` | `4a-watermelon`     |
+| Codewars   | `problems/codewars/`   | freeform kebab-case (kata name)              | `multiply-numbers`  |
+| Other      | `problems/other/`      | freeform kebab-case                          | `acme-rotate-array` |
 
 Codewars kata don't have a numeric ID, so `NUM` isn't required — note the kata's
 kyu rank in the generated problem `README.md`'s **Difficulty** field instead
@@ -27,7 +27,7 @@ kyu rank in the generated problem `README.md`'s **Difficulty** field instead
 
 Use the scaffold script via `make`:
 
-```
+```sh
 make new PLATFORM=leetcode LANG=go NUM=0001 NAME=two-sum
 make new PLATFORM=codeforces LANG=python NUM=4a NAME=watermelon
 make new PLATFORM=codewars LANG=python NAME=multiply-numbers

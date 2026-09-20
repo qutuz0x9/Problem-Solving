@@ -11,7 +11,7 @@ Generate high-quality, meaningful git commits following the Conventional Commits
 
 ## Usage
 
-```
+```txt
 /git-commit
 ```
 
@@ -57,7 +57,7 @@ The user always reviews the message before the commit is created.
 
 ## Commit Format
 
-```
+```txt
 <type>(<scope>): <short description>
 
 [body — explain the motivation, context, or reasoning]
@@ -84,15 +84,15 @@ Co-Authored-By: <attribution line from the session context>
 
 Derive the scope from the changed paths. Current scopes in this repo:
 
-| Paths                                                | Scope                                         |
-| ---------------------------------------------------- | --------------------------------------------- |
-| `problems/<platform>/<slug>/`                        | `<platform>` (leetcode, codeforces, codewars, other) |
-| `patterns/`                                          | `patterns`                                    |
-| `helpers/`, `Makefile`                               | `helpers`                                     |
-| `.github/workflows/`                                 | `ci`                                          |
-| `README.md`, `USAGE.md`, `problems/README.md`        | `docs`                                        |
-| `.claude/`, `CLAUDE.md`                              | `claude`                                      |
-| `.clang-format`, `ruff.toml`, `.golangci.yml`, `.eslintrc.json`, `rustfmt.toml`, `.prettierrc` | `lint` |
+| Paths                                                                                          | Scope                                                |
+|------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `problems/<platform>/<slug>/`                                                                  | `<platform>` (leetcode, codeforces, codewars, other) |
+| `patterns/`                                                                                    | `patterns`                                           |
+| `helpers/`, `Makefile`                                                                         | `helpers`                                            |
+| `.github/workflows/`                                                                           | `ci`                                                 |
+| `README.md`, `USAGE.md`, `problems/README.md`                                                  | `docs`                                               |
+| `.claude/`, `CLAUDE.md`                                                                        | `claude`                                             |
+| `.clang-format`, `ruff.toml`, `.golangci.yml`, `.eslintrc.json`, `rustfmt.toml`, `.prettierrc` | `lint`                                               |
 
 If changes span several scopes, omit the scope or split the commit.
 
@@ -121,7 +121,7 @@ If changes span several scopes, omit the scope or split the commit.
 
 ### New problem
 
-```
+```txt
 feat(leetcode): solve 0219 contains-duplicate-ii in C++
 
 Track the last index of each value in a hash map and check whether the
@@ -133,7 +133,7 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 
 ### Tooling fix
 
-```
+```txt
 fix(helpers): make C++ templates pass clang-format
 
 Freshly scaffolded C++ problems failed `make lint` because the includes
@@ -148,7 +148,7 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 
 ### Docs change
 
-```
+```txt
 docs(patterns): link 0349 to the hash-set pattern
 
 The pattern index had no entry for hash-set lookups, so problems that

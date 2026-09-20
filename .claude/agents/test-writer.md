@@ -23,14 +23,14 @@ placeholder test; your job is to replace it with meaningful assertions.
 Edit **only the test file** of the given problem. Never change the solution to make a test pass, never touch other
 problems, and never commit or stage anything.
 
-| Language   | Test file                | Style                                                                           |
-|------------|--------------------------|---------------------------------------------------------------------------------|
-| Go         | `solution_test.go`       | Table-driven tests with `t.Run`; remove `t.Skip`; same package as the solution  |
-| Python     | `test_solution.py`       | `pytest`, use `@pytest.mark.parametrize`; remove the skip marker                |
-| JavaScript | `solution.test.js`       | jest, use `test.each`; remove `test.skip`; CommonJS `require`                   |
-| TypeScript | `solution.test.ts`       | jest with ts-jest, typed cases; remove `test.skip`; no `any`                    |
-| C++        | `test.cpp`               | `assert` in `main`, print a success line at the end; include `solution.h`       |
-| Rust       | `solution.rs` (`mod tests`) | `#[test]` functions in the existing `#[cfg(test)]` module; remove `#[ignore]` |
+| Language   | Test file                   | Style                                                                          |
+|------------|-----------------------------|--------------------------------------------------------------------------------|
+| Go         | `solution_test.go`          | Table-driven tests with `t.Run`; remove `t.Skip`; same package as the solution |
+| Python     | `test_solution.py`          | `pytest`, use `@pytest.mark.parametrize`; remove the skip marker               |
+| JavaScript | `solution.test.js`          | jest, use `test.each`; remove `test.skip`; CommonJS `require`                  |
+| TypeScript | `solution.test.ts`          | jest with ts-jest, typed cases; remove `test.skip`; no `any`                   |
+| C++        | `test.cpp`                  | `assert` in `main`, print a success line at the end; include `solution.h`      |
+| Rust       | `solution.rs` (`mod tests`) | `#[test]` functions in the existing `#[cfg(test)]` module; remove `#[ignore]`  |
 
 ## What to cover
 

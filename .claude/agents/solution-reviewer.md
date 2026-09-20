@@ -47,7 +47,7 @@ Use `git status`, `git diff` and `git log` if you need to see what changed. Do n
 
 ## Output format
 
-```
+```txt
 Verdict: ready | needs changes | blocked
 
 Blocking issues

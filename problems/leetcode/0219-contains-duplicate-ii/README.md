@@ -2,7 +2,7 @@
 
 - **Platform:** leetcode
 - **Language:** cpp
-- **Link:** https://leetcode.com/problems/contains-duplicate-ii/
+- **Link:** <https://leetcode.com/problems/contains-duplicate-ii/>
 - **Difficulty:** Easy
 - **Tags:** Array, Hash Table, Sliding Window
 
@@ -15,21 +15,21 @@ and `j` that are at most `k` apart (`nums[i] == nums[j]` and `abs(i - j) <= k`),
 
 **Example 1:**
 
-```
+```txt
 Input: nums = [1,2,3,1], k = 3
 Output: true
 ```
 
 **Example 2:**
 
-```
+```txt
 Input: nums = [1,0,1,1], k = 1
 Output: true
 ```
 
 **Example 3:**
 
-```
+```txt
 Input: nums = [1,2,3,1,2,3], k = 2
 Output: false
 ```
