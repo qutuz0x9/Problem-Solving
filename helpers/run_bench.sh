@@ -59,7 +59,7 @@ bench_dir() {
     if [[ ! -f "$dir/benchmark.cpp" ]]; then
       skip cpp "$rel" "no benchmark.cpp"
     elif have g++; then
-      run_step cpp "$dir" "g++ -std=c++17 -O2 -o '$WORK_DIR/bench' benchmark.cpp solution.cpp && '$WORK_DIR/bench'"
+      run_step cpp "$dir" "g++ -std=c++20 -O2 -o '$WORK_DIR/bench' benchmark.cpp solution.cpp && '$WORK_DIR/bench'"
     else
       skip cpp "$rel" "g++ not installed"
     fi

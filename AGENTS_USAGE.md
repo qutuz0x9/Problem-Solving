@@ -370,7 +370,7 @@ int MaxWindowSum(const std::vector<int>& a, int k) {
     }
     return best;
 }
-// {2, 1, 5, 1, 3, 2}, k = 3 -> 9        (compiled with g++ -std=c++17 -Wall -Wextra and run)
+// {2, 1, 5, 1, 3, 2}, k = 3 -> 9        (compiled with g++ -std=c++20 -Wall -Wextra and run)
 
 Complexity: O(n) time, O(1) space.
 Common mistakes: forgetting the first window, an off-by-one at a[r - k], using it with negative numbers and a sum target.

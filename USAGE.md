@@ -69,8 +69,12 @@ missing, without failing the whole run. Install only what you plan to use:
 | Python     | `python3` + `pytest`              | `ruff`                                            |
 | JavaScript | `node` + `npm install` (jest)     | `node` + `npm install` (eslint)                   |
 | TypeScript | `node` + `npm install` (ts-jest)  | `node` + `npm install` (eslint)                   |
-| C++        | `g++`                             | `clang-format`                                    |
+| C++        | `g++` 10+ (C++20)                 | `clang-format`                                    |
 | Rust       | `rustc`                           | `rustfmt`                                         |
+
+C++ problems are built with `-std=c++20` (`make test`, `make bench`, the editor and CI), so you need g++ 10 or
+newer; `.clang-format` is set to C++20 too. With an older compiler the build fails with the compiler's own
+error about the unsupported standard.
 
 For JavaScript/TypeScript, run `npm install` once in the repo root. The
 tools (jest, ts-jest, eslint, typescript, ts-node, prettier) are pinned in
@@ -335,7 +339,7 @@ The benchmark output is always shown (unlike `make test`). What runs underneath:
 | Python     | `python3 benchmark.py`                                                 |
 | JavaScript | `node benchmark.js`                                                    |
 | TypeScript | `npx ts-node benchmark.ts` (needs `npm install` once in the repo root) |
-| C++        | `g++ -std=c++17 -O2 benchmark.cpp solution.cpp`, then run it           |
+| C++        | `g++ -std=c++20 -O2 benchmark.cpp solution.cpp`, then run it           |
 | Rust       | `rustc --edition 2021 -O benchmark.rs`, then run it                    |
 
 C++ and Rust binaries are built in a temporary directory that is removed

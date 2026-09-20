@@ -98,9 +98,9 @@ separators, and a blank line before and after.
 
 ## Code: C++ templates, always verified
 
-- C++17, in the repo's style (Google-based, 4-space indent, 100 columns; see `.clang-format`).
+- C++20, in the repo's style (Google-based, 4-space indent, 100 columns; see `.clang-format`).
 - **Compile and run every snippet before it goes into a file.** Work in a temp directory (`mktemp -d`), build with
-  `g++ -std=c++17 -Wall -Wextra`, run it, and check the output matches what your walkthrough claims. Delete the temp
+  `g++ -std=c++20 -Wall -Wextra`, run it, and check the output matches what your walkthrough claims. Delete the temp
   files afterwards. If `g++` is missing, say the code is unverified.
 - Show the template plus a tiny usage example with its expected output in a comment (for example
   `// {2, 7, 11, 15}, 9 -> {0, 1}`).

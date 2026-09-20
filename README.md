@@ -87,14 +87,14 @@ shows passing output for test and lint.
 
 **Platforms:** LeetCode, Codeforces, Codewars, and Other/custom.
 
-| Language   | `make test`      | `make lint`                           | `make bench`     |
-|------------|------------------|---------------------------------------|------------------|
-| Go         | `go test`        | `golangci-lint` v2 (`gofmt` fallback) | `go test -bench` |
-| Python     | `pytest`         | `ruff`                                | `python3`        |
-| JavaScript | `jest`           | `eslint`                              | `node`           |
-| TypeScript | `ts-jest`        | `eslint`                              | `ts-node`        |
-| C++        | `g++` + `assert` | `clang-format`                        | `g++ -O2`        |
-| Rust       | `rustc --test`   | `rustfmt`                             | `rustc -O`       |
+| Language   | `make test`       | `make lint`                           | `make bench`     |
+|------------|-------------------|---------------------------------------|------------------|
+| Go         | `go test`         | `golangci-lint` v2 (`gofmt` fallback) | `go test -bench` |
+| Python     | `pytest`          | `ruff`                                | `python3`        |
+| JavaScript | `jest`            | `eslint`                              | `node`           |
+| TypeScript | `ts-jest`         | `eslint`                              | `ts-node`        |
+| C++        | `g++` 10+ (C++20) | `clang-format`                        | `g++ -O2`        |
+| Rust       | `rustc --test`    | `rustfmt`                             | `rustc -O`       |
 
 You don't need every toolchain: the runners skip what isn't installed, and CI
 installs everything. Install commands are in

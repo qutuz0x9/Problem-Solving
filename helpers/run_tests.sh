@@ -48,7 +48,7 @@ run_in_dir() {
     fi
   elif [[ -f "$dir/test.cpp" ]]; then
     if have g++; then
-      run_step cpp "$dir" "g++ -std=c++17 -o '$WORK_DIR/test_bin' test.cpp solution.cpp && '$WORK_DIR/test_bin'"
+      run_step cpp "$dir" "g++ -std=c++20 -o '$WORK_DIR/test_bin' test.cpp solution.cpp && '$WORK_DIR/test_bin'"
     else
       skip cpp "$rel" "g++ not installed"
     fi
