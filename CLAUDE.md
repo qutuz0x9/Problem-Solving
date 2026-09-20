@@ -15,15 +15,18 @@ run the right test/lint tool for whichever language a problem happens to use.
 make new PLATFORM=<leetcode|codeforces|codewars|other> LANG=<go|python|javascript|typescript|cpp|rust> NAME=<slug> [NUM=<id>] [URL=<url>] [TITLE=<title>]
 make test [DIR=problems/<platform>/<slug>]   # all problems if DIR omitted
 make lint [DIR=problems/<platform>/<slug>]   # all problems if DIR omitted
+make bench [DIR=problems/<platform>/<slug>]  # all problems if DIR omitted
 make index                                   # regenerate README.md's Problem Index table
 ```
 
 - `NUM` is required for `leetcode` (zero-padded to 4 digits) and `codeforces` (e.g. `4a`);
   not used for `codewars`/`other` (note kyu rank in the problem's README `Difficulty` field instead).
 - `make new` refuses to overwrite an existing problem folder.
-- There is no single benchmark target — run the language's native benchmark command directly
-  inside the problem folder (see `USAGE.md` §8 for the exact command per language, e.g.
-  `go test -bench=. -run=^$`, `python benchmark.py`, `npx ts-node benchmark.ts`, etc.).
+- `make bench` runs each problem's benchmark file (`helpers/run_bench.sh`, same colored UI as
+  test/lint, output always shown). Every language's benchmark template builds inputs of several
+  sizes (a marked `TODO` spot in `make_input`/`makeInput`), warms up, and prints min/median ms per
+  size (Go prints `go test -bench` output). A fresh scaffold's benchmark calls `solve`, so it fails
+  with the stub's `TODO` error until `solve` is implemented. See `USAGE.md` Step 8.
 - JS/TS tooling (jest, ts-jest, eslint, ts-node, prettier) is pinned in the root `package.json`
   and lockfile; run `npm install` once. The runners use `npx --no-install`, and JS/TS problems are
   skipped (not failed) with `run 'npm install' first` if `node_modules` is missing. ESLint uses the
@@ -41,7 +44,7 @@ make index                                   # regenerate README.md's Problem In
   substituting slug/title/URL/package-name placeholders. Go package names are derived from the
   slug with hyphens replaced by underscores, prefixed with `p_` if the slug starts with a digit
   (e.g. slug `0001-two-sum` → package `p_0001_two_sum`).
-- `helpers/run_tests.sh` / `helpers/run_lint.sh` — detect a problem's language (by which solution
+- `helpers/run_tests.sh` / `helpers/run_lint.sh` / `helpers/run_bench.sh` — detect a problem's language (by which solution
   file extension is present) and dispatch to the matching tool, skipping gracefully if that
   toolchain isn't installed. When run with no `DIR`, they walk every folder under `problems/`.
 - `helpers/generate_index.sh` — regenerates the Problem Index table in root `README.md` between
@@ -61,7 +64,8 @@ make index                                   # regenerate README.md's Problem In
 - `.claude/agents/` — custom subagents for the problem workflow: `hint-coach` (hints only, never
   the solution), `solution-reviewer` (read-only review + `make test`/`make lint`), `test-writer`
   (replaces the placeholder test with real cases), and `problem-documenter` (README TODOs,
-  `patterns/` link, `make index`). None of them commit.
+  `patterns/` link, `make index`), and `benchmark-runner` (writes the benchmark input builder, runs
+  `make bench`, checks growth vs the README's complexity). None of them commit.
 - `.claude/skills/problem-readme/` — the `/problem-readme <url> [lang]` skill: fetches a problem via
   `helpers/fetch_problem.py` (LeetCode GraphQL, Codewars API, Codeforces metadata only), runs `make new`,
   and fills the README (paraphrased statement, verbatim examples/constraints; Approach/Complexity stay TODO).

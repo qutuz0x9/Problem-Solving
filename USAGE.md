@@ -28,12 +28,13 @@ helpers/
   fetch_problem.py     # fetches a problem's title/tags/statement from its URL
   run_tests.sh         # dispatches `make test` to the right test runner
   run_lint.sh          # dispatches `make lint` to the right linter
-  ui.sh                # shared colors/icons/summary used by run_tests.sh and run_lint.sh
+  run_bench.sh         # dispatches `make bench` to the right benchmark command
+  ui.sh                # shared colors/icons/summary used by run_tests.sh, run_lint.sh and run_bench.sh
   generate_index.sh    # regenerates the problem table in README.md
   makefile             # actual Makefile target logic (included by root Makefile)
 .claude/
   skills/              # Claude Code skills: /git-commit, /problem-readme
-  agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter
+  agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter, benchmark-runner
 .github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
 package.json           # pinned JS/TS tooling (jest, ts-jest, eslint, ...); run `npm install` once
 eslint.config.js       # ESLint flat config for JS/TS problems
@@ -57,14 +58,14 @@ You don't need every toolchain installed — `make test` and `make lint` detect
 what's available and print `skip (... not installed): <path>` for anything
 missing, without failing the whole run. Install only what you plan to use:
 
-| Language   | Needed for tests                  | Needed for lint                                |
-|------------|-----------------------------------|------------------------------------------------|
+| Language   | Needed for tests                  | Needed for lint                                   |
+|------------|-----------------------------------|---------------------------------------------------|
 | Go         | `go`                              | `golangci-lint` v2 (or `gofmt`, used as fallback) |
-| Python     | `python3` + `pytest`              | `ruff`                                         |
-| JavaScript | `node` + `npm install` (jest)     | `node` + `npm install` (eslint)                |
-| TypeScript | `node` + `npm install` (ts-jest)  | `node` + `npm install` (eslint)                |
-| C++        | `g++`                             | `clang-format`                                 |
-| Rust       | `rustc`                           | `rustfmt`                                      |
+| Python     | `python3` + `pytest`              | `ruff`                                            |
+| JavaScript | `node` + `npm install` (jest)     | `node` + `npm install` (eslint)                   |
+| TypeScript | `node` + `npm install` (ts-jest)  | `node` + `npm install` (eslint)                   |
+| C++        | `g++`                             | `clang-format`                                    |
+| Rust       | `rustc`                           | `rustfmt`                                         |
 
 For JavaScript/TypeScript, run `npm install` once in the repo root. The
 tools (jest, ts-jest, eslint, typescript, ts-node, prettier) are pinned in
@@ -77,14 +78,14 @@ downloaded on the fly. Until you do, JS/TS problems are skipped with
 Only install what you need. These commands work on Linux (adapt them for your
 OS or package manager), and none of them needs `sudo` except `apt`:
 
-| Tool                | How to install                                                                                     |
-|---------------------|----------------------------------------------------------------------------------------------------|
-| Go + `gofmt`        | Download the tarball from <https://go.dev/dl/>, extract it (e.g. to `~/.local/go`), and add its `bin/` to `PATH` |
-| `golangci-lint` v2  | `go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest` (needs `~/go/bin` on `PATH`) |
+| Tool                | How to install                                                                                                                                      |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Go + `gofmt`        | Download the tarball from <https://go.dev/dl/>, extract it (e.g. to `~/.local/go`), and add its `bin/` to `PATH`                                    |
+| `golangci-lint` v2  | `go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest` (needs `~/go/bin` on `PATH`)                                             |
 | Python tools        | `pip install pytest ruff`. If your system blocks that (PEP 668), install each one separately with `uv tool install <tool>` or `pipx install <tool>` |
-| `clang-format`      | `pip install clang-format` (or `uv tool install clang-format`), or `sudo apt install clang-format` |
-| Rust + `rustfmt`    | `rustup` from <https://rustup.rs> (`rustup component add rustfmt` if it is missing)              |
-| Node packages       | Install Node 20.19+/22.13+/24+, then `npm install` in the repo root                                |
+| `clang-format`      | `pip install clang-format` (or `uv tool install clang-format`), or `sudo apt install clang-format`                                                  |
+| Rust + `rustfmt`    | `rustup` from <https://rustup.rs> (`rustup component add rustfmt` if it is missing)                                                                 |
+| Node packages       | Install Node 20.19+/22.13+/24+, then `npm install` in the repo root                                                                                 |
 
 Make sure the install locations (`~/.local/bin`, `~/go/bin`, `~/.cargo/bin`,
 `~/.local/go/bin`) are on your `PATH`, for example in `~/.zshrc` or
@@ -129,14 +130,14 @@ make new PLATFORM=other LANG=rust NAME=acme-rotate-array
 
 Arguments:
 
-| Arg        | Required | Notes                                                                             |
-|------------|----------|-----------------------------------------------------------------------------------|
-| `PLATFORM` | yes      | `leetcode` \| `codeforces` \| `codewars` \| `other`                               |
-| `LANG`     | yes      | `go` \| `python` \| `javascript` \| `typescript` \| `cpp` \| `rust`               |
-| `NAME`     | yes      | freeform; normalized to kebab-case                                                |
-| `NUM`      | leetcode/codeforces only | leetcode: any int, zero-padded to 4 digits; codeforces: e.g. `4a` |
-| `URL`      | no       | source URL, inserted into solution header + README                                |
-| `TITLE`    | no       | human title; auto-derived from `NAME` if omitted (`two-sum` → `Two Sum`)          |
+| Arg        | Required                 | Notes                                                                             |
+|------------|--------------------------|-----------------------------------------------------------------------------------|
+| `PLATFORM` | yes                      | `leetcode` \| `codeforces` \| `codewars` \| `other`                               |
+| `LANG`     | yes                      | `go` \| `python` \| `javascript` \| `typescript` \| `cpp` \| `rust`               |
+| `NAME`     | yes                      | freeform; normalized to kebab-case                                                |
+| `NUM`      | leetcode/codeforces only | leetcode: any int, zero-padded to 4 digits; codeforces: e.g. `4a`                 |
+| `URL`      | no                       | source URL, inserted into solution header + README                                |
+| `TITLE`    | no                       | human title; auto-derived from `NAME` if omitted (`two-sum` → `Two Sum`)          |
 
 `TITLE` and `URL` may contain spaces and characters such as `&`, `?` or `'`;
 just quote them as in the examples above. If the target folder already exists,
@@ -151,7 +152,7 @@ Files created depend on the language (all under `problems/<platform>/<slug>/`):
 - **JavaScript**: `solution.js`, `solution.test.js`, `benchmark.js`, `README.md`
 - **TypeScript**: `solution.ts`, `solution.test.ts`, `benchmark.ts`, `tsconfig.json`, `README.md`
 - **C++**: `solution.cpp`, `solution.h`, `test.cpp`, `benchmark.cpp`, `README.md`
-- **Rust**: `solution.rs` (contains the solution, `main`, and `#[cfg(test)] mod tests`), `README.md`
+- **Rust**: `solution.rs` (contains the solution, `main`, and `#[cfg(test)] mod tests`), `benchmark.rs`, `README.md`
 
 Every `README.md` starts with a template: Platform / Language / Link /
 Difficulty / Tags, plus **Problem**, **Approach**, and **Complexity** sections
@@ -175,12 +176,12 @@ It fetches the title, difficulty, tags, examples and constraints, runs
 Approach and Complexity stay `TODO` until you solve it (the `problem-documenter`
 agent can fill them in afterwards; see [section 9](#9-working-with-claude-code-optional)).
 
-| Site        | What is fetched                                                          |
-|-------------|--------------------------------------------------------------------------|
+| Site        | What is fetched                                                            |
+|-------------|----------------------------------------------------------------------------|
 | LeetCode    | Everything, through LeetCode's unofficial GraphQL endpoint (it may change) |
-| Codewars    | Everything, through the official API                                     |
-| Codeforces  | Title, rating and tags only; you paste the statement text                |
-| Other sites | Nothing; you paste the statement text                                    |
+| Codewars    | Everything, through the official API                                       |
+| Codeforces  | Title, rating and tags only; you paste the statement text                  |
+| Other sites | Nothing; you paste the statement text                                      |
 
 Premium LeetCode problems have no public statement, so you paste it too. The
 fetch step is `helpers/fetch_problem.py <url>`, which you can also run on its
@@ -276,37 +277,63 @@ output (colors, icons, layout), edit `helpers/ui.sh`, which both commands share.
 
 ### Step 8 — Run the benchmark
 
-There's no single `make bench` target (benchmark tooling differs too much per
-language) — run the language's native benchmark command directly inside the
-problem folder:
-
 ```sh
-cd problems/leetcode/0001-two-sum
-
-# Go
-go test -bench=. -run=^$
-
-# Python
-python benchmark.py
-
-# JavaScript
-node benchmark.js
-
-# TypeScript (needs `npm install` once in the repo root)
-npx ts-node benchmark.ts
-
-# C++
-g++ -std=c++17 -O2 -o /tmp/bench benchmark.cpp solution.cpp && /tmp/bench
-
-# Rust
-rustc --edition 2021 -O -o /tmp/bench solution.rs && /tmp/bench
+make bench DIR=problems/leetcode/0001-two-sum     # benchmark just this problem
+make bench                                        # every problem (can be slow)
 ```
 
-Example Go output:
+Every problem has a benchmark file with the same shape in all six languages.
+It builds an input of several sizes (default `10`, `1000` and `100000`, the
+`SIZES` list at the top), does one warmup call, times several runs, and prints
+the fastest and the median time per size. Go uses its own `b.Run` sub-benchmarks
+and prints `ns/op` and allocations instead.
+
+To benchmark a problem:
+
+1. Implement `solve` (a fresh scaffold fails `make bench` with its `TODO` error,
+   because the benchmark really calls `solve`).
+2. Open the benchmark file and fill in the marked `TODO` spot that builds the
+   input for size `n`, using the same arguments as your `solve`. Prefer a
+   worst-case input for your algorithm. Lower `SIZES` if your solution is slow.
+3. Run `make bench DIR=...`.
+
+Example output (Python):
 
 ```txt
-BenchmarkSolve-16     30715885         38.82 ns/op
+▶ Running benchmarks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓ DONE  python      problems/leetcode/0001-two-sum  0.05s
+      │ size              min ms     median ms
+      │ 10              0.000400      0.000500
+      │ 1000            0.020300      0.020600
+      │ 100000          2.354400      2.396700
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ✓ 1 completed   ✗ 0 failed   ○ 0 skipped   0.06s
+
+All benchmarks completed.
 ```
+
+Read the table by comparing rows: for a 100x larger input, an `O(n)` solution
+should take about 100x longer, `O(n log n)` about 130-150x, and `O(n^2)` about
+10,000x. Compare that with the Complexity section of your README. Timings are
+noisy, so run it a few times and trust the minimum more than the median. In
+Claude Code, the `benchmark-runner` agent can write the input builder for you
+and check the growth against your complexity claim.
+
+The benchmark output is always shown (unlike `make test`). What runs underneath:
+
+| Language   | Command used by `make bench`                                        |
+|------------|---------------------------------------------------------------------|
+| Go         | `go test -bench=. -benchmem -run='^$'`                              |
+| Python     | `python3 benchmark.py`                                              |
+| JavaScript | `node benchmark.js`                                                 |
+| TypeScript | `npx ts-node benchmark.ts` (needs `npm install` once in the repo root) |
+| C++        | `g++ -std=c++17 -O2 benchmark.cpp solution.cpp`, then run it        |
+| Rust       | `rustc --edition 2021 -O benchmark.rs`, then run it                 |
+
+C++ and Rust binaries are built in a temporary directory that is removed
+afterwards. You can also run a benchmark by hand from inside the problem folder
+with the command in the table.
 
 ### Step 9 — Lint
 
@@ -354,9 +381,9 @@ make new PLATFORM=leetcode LANG=go NUM=1 NAME=two-sum \
 make test DIR=problems/leetcode/0001-two-sum
 # -> ok  p_0001_two_sum  0.002s
 
-# 5. Benchmark
-cd problems/leetcode/0001-two-sum && go test -bench=. -run=^$ && cd -
-# -> BenchmarkSolve-16   30715885   38.82 ns/op
+# 5. Benchmark (after filling in the input builder in benchmark_test.go)
+make bench DIR=problems/leetcode/0001-two-sum
+# -> BenchmarkSolve/n=1000-16   4431433   269.9 ns/op   0 B/op   0 allocs/op
 
 # 6. Lint
 make lint DIR=problems/leetcode/0001-two-sum
@@ -387,10 +414,12 @@ and add it to the index in `patterns/README.md`.
 | `make new`   | `PLATFORM=`, `LANG=`, `NAME=`, `[NUM=]`, `[URL=]`, `[TITLE=]` | Scaffold a new problem folder from templates                |
 | `make test`  | `[DIR=<problem-path>]`                                        | Run tests for one problem, or all problems if `DIR` omitted |
 | `make lint`  | `[DIR=<problem-path>]`                                        | Lint one problem, or all problems if `DIR` omitted          |
+| `make bench` | `[DIR=<problem-path>]`                                        | Benchmark one problem, or all problems if `DIR` omitted     |
 | `make index` | —                                                             | Regenerate the Problem Index table in root `README.md`      |
 
-`make test` and `make lint` also read the environment variables `VERBOSE`,
-`NO_COLOR` and `FORCE_COLOR` (see Step 7).
+`make test`, `make lint` and `make bench` also read the environment variables
+`NO_COLOR` and `FORCE_COLOR` (and `VERBOSE` for test and lint); see Step 7.
+`make bench` always shows the benchmark output.
 
 ## 7. Troubleshooting
 
@@ -419,6 +448,13 @@ and add it to the index in `patterns/README.md`.
   statement, and unknown sites aren't fetched. Paste the statement when asked.
 - **The new Claude Code skill or agent isn't found** — skills and agents are
   loaded when Claude Code starts; restart it (or open `/agents`).
+- **`make bench` fails with `TODO: implement`, `NotImplementedError` or
+  `unimplemented!`** — the benchmark really calls `solve`, so implement it first.
+  (Go and C++ scaffolds have no-op stubs, so they "run" without measuring anything.)
+- **Benchmark times are about 0 and do not grow with `n`** — you haven't filled in
+  the input builder yet, or `solve` is being called with an empty input. See Step 8.
+- **Benchmark numbers change a lot between runs** — that is normal noise. Run it a
+  few times, close heavy programs, and compare the minimum column.
 - **Slug looks different than expected** — `NAME` is always lowercased and
   non-alphanumeric characters are collapsed to single hyphens (e.g.
   `Two Sum!!` → `two-sum`).
@@ -448,10 +484,10 @@ and add it to the index in `patterns/README.md`.
 
 Everything above works without any AI tooling. If you use
 [Claude Code](https://claude.com/claude-code) in this folder, `.claude/` adds two
-skills (slash commands) and four agents that automate the tedious steps around
+skills (slash commands) and five agents that automate the tedious steps around
 solving a problem. None of them commits anything on their own.
 
-**Skills**
+### **Skills**
 
 | Command                          | What it does                                                                                     |
 |----------------------------------|--------------------------------------------------------------------------------------------------|
@@ -460,20 +496,22 @@ solving a problem. None of them commits anything on their own.
 
 **Agents** (Claude picks them when the task fits, or ask for one by name)
 
-| Agent                | Use it to...                                                                                              | Can edit files?        |
-|----------------------|-----------------------------------------------------------------------------------------------------------|------------------------|
+| Agent                | Use it to...                                                                                               | Can edit files?        |
+|----------------------|------------------------------------------------------------------------------------------------------------|------------------------|
 | `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                  | No (read-only)         |
 | `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint | No (read-only)         |
 | `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                        | Only the test file     |
 | `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`            | README, `patterns/`    |
+| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim | Only the benchmark file |
 
-**A typical session**
+### **A typical session**
 
 ```txt
 /problem-readme https://leetcode.com/problems/contains-duplicate-ii/ cpp
    ...you solve it (ask hint-coach if you get stuck)...
 "use test-writer on problems/leetcode/0219-contains-duplicate-ii"
 "use solution-reviewer on problems/leetcode/0219-contains-duplicate-ii"
+"use benchmark-runner on problems/leetcode/0219-contains-duplicate-ii"
 "use problem-documenter on problems/leetcode/0219-contains-duplicate-ii"
 git add problems/leetcode/0219-contains-duplicate-ii README.md patterns/
 /git-commit

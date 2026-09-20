@@ -14,8 +14,8 @@ problem index.
 - **Smart test/lint dispatch** — `make test` and `make lint` detect the language
   of each problem and run the right tool, skipping gracefully if a toolchain
   isn't installed locally.
-- **Benchmarks included** — every problem gets a benchmark file/harness for its
-  language.
+- **Benchmarks included** — every problem gets a benchmark harness for its
+  language, and `make bench` runs it with the same colored output.
 - **Auto-generated problem index** — `make index` keeps the table below in sync
   with everything under `problems/`.
 - **CI-ready** — GitHub Actions runs tests and lint across all toolchains on
@@ -31,7 +31,7 @@ problems/            # solved problems, organized by platform
   other/<slug>/       # company/custom questions
 patterns/             # cross-reference index of problem-solving techniques
 helpers/              # scaffold script, test/lint dispatch, index generator, templates
-Makefile              # make new / test / lint / index
+Makefile              # make new / test / lint / bench / index
 ```
 
 ## 🚀 Quick start
@@ -40,6 +40,7 @@ Makefile              # make new / test / lint / index
 make new PLATFORM=leetcode LANG=go NUM=1 NAME=two-sum   # scaffold a problem
 make test DIR=problems/leetcode/0001-two-sum            # run its tests
 make lint DIR=problems/leetcode/0001-two-sum             # lint it
+make bench DIR=problems/leetcode/0001-two-sum            # benchmark it
 make index                                               # refresh the index below
 ```
 
