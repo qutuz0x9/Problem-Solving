@@ -64,5 +64,5 @@ real tests, running benchmarks, troubleshooting, etc.), see **[`USAGE.md`](USAGE
 | Platform | Problem | Language |
 |---|---|---|
 | leetcode | [Contains Duplicate II](problems/leetcode/0219-contains-duplicate-ii) | C++ |
-| leetcode | [Intersection Of Two Arrays](problems/leetcode/0349-intersection-of-two-arrays) | C++ |
+| leetcode | [Intersection of Two Arrays](problems/leetcode/0349-intersection-of-two-arrays) | C++ |
 <!-- PROBLEM_INDEX:END -->
