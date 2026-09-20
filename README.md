@@ -63,6 +63,6 @@ real tests, running benchmarks, troubleshooting, etc.), see **[`USAGE.md`](USAGE
 <!-- PROBLEM_INDEX:START -->
 | Platform | Problem | Language |
 |---|---|---|
-| codewars | [Multiply Numbers](problems/codewars/multiply-numbers) | Python |
-| leetcode | [Two Sum](problems/leetcode/0001-two-sum) | Go |
+| leetcode | [Contains Duplicate II](problems/leetcode/0219-contains-duplicate-ii) | C++ |
+| leetcode | [Intersection Of Two Arrays](problems/leetcode/0349-intersection-of-two-arrays) | C++ |
 <!-- PROBLEM_INDEX:END -->
