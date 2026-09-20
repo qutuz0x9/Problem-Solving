@@ -2,6 +2,8 @@
  * Lightweight timing benchmark for {{TITLE}}.
  * Run with: node benchmark.js
  */
+// TODO: remove the next line once the loop below calls solve(...)
+// eslint-disable-next-line no-unused-vars
 const { solve } = require("./solution");
 
 const N = 1000;

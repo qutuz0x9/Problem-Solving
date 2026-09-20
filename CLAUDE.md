@@ -24,6 +24,10 @@ make index                                   # regenerate README.md's Problem In
 - There is no single benchmark target — run the language's native benchmark command directly
   inside the problem folder (see `USAGE.md` §8 for the exact command per language, e.g.
   `go test -bench=. -run=^$`, `python benchmark.py`, `npx ts-node benchmark.ts`, etc.).
+- JS/TS tooling (jest, ts-jest, eslint, ts-node, prettier) is pinned in the root `package.json`
+  and lockfile; run `npm install` once. The runners use `npx --no-install`, and JS/TS problems are
+  skipped (not failed) with `run 'npm install' first` if `node_modules` is missing. ESLint uses the
+  flat config in `eslint.config.js`.
 - Locally, `make test`/`make lint` print `skip (<tool> not installed): <path>` and continue when
   a toolchain isn't present, rather than failing — this is expected on a machine without every
   language installed. CI (`.github/workflows/ci.yml`) always installs Go, Python, Node, Rust,

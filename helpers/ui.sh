@@ -67,6 +67,21 @@ badge() {
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
+# JS/TS tooling (jest, ts-jest, eslint, ...) is pinned in the root package.json
+# and installed with `npm install`. Returns 1 (and sets NODE_SKIP_REASON) when
+# it can't be used, so callers can skip the problem with a helpful hint.
+node_deps_ready() {
+  if ! have npx; then
+    NODE_SKIP_REASON="node/npx not installed"
+    return 1
+  fi
+  if [[ ! -d "$REPO_ROOT/node_modules" ]]; then
+    NODE_SKIP_REASON="run 'npm install' first"
+    return 1
+  fi
+  return 0
+}
+
 # skip <lang> <problem rel path> <reason>
 skip() {
   local lang="$1" rel="$2" reason="$3"

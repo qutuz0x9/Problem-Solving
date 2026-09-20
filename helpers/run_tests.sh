@@ -35,16 +35,16 @@ run_in_dir() {
       skip python "$rel" "python/pytest not installed"
     fi
   elif [[ -f "$dir/solution.test.js" ]]; then
-    if have npx; then
-      run_step javascript "$dir" "npx --yes jest --config '{}' solution.test.js"
+    if node_deps_ready; then
+      run_step javascript "$dir" "npx --no-install jest --config '{}' solution.test.js"
     else
-      skip javascript "$rel" "node/npx not installed"
+      skip javascript "$rel" "$NODE_SKIP_REASON"
     fi
   elif [[ -f "$dir/solution.test.ts" ]]; then
-    if have npx; then
-      run_step typescript "$dir" "npx --yes jest --config '{\"preset\":\"ts-jest\"}' solution.test.ts"
+    if node_deps_ready; then
+      run_step typescript "$dir" "npx --no-install jest --config '{\"preset\":\"ts-jest\"}' solution.test.ts"
     else
-      skip typescript "$rel" "node/npx not installed"
+      skip typescript "$rel" "$NODE_SKIP_REASON"
     fi
   elif [[ -f "$dir/test.cpp" ]]; then
     if have g++; then

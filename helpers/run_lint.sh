@@ -38,10 +38,10 @@ lint_dir() {
   elif [[ -f "$dir/solution.js" || -f "$dir/solution.ts" ]]; then
     local lang="javascript"
     [[ -f "$dir/solution.ts" ]] && lang="typescript"
-    if have npx; then
-      run_step "$lang" "$dir" "cd '$REPO_ROOT' && npx --yes eslint --color '$dir'"
+    if node_deps_ready; then
+      run_step "$lang" "$dir" "cd '$REPO_ROOT' && npx --no-install eslint --color '$dir'"
     else
-      skip "$lang" "$rel" "eslint/npx not installed"
+      skip "$lang" "$rel" "$NODE_SKIP_REASON"
     fi
   elif [[ -f "$dir/solution.cpp" ]]; then
     if have clang-format; then

@@ -49,10 +49,16 @@ missing, without failing the whole run. Install only what you plan to use:
 |------------|----------------------------|------------------------------------------------|
 | Go         | `go`                       | `golangci-lint` (or `gofmt`, used as fallback) |
 | Python     | `python3` + `pytest`       | `ruff`                                         |
-| JavaScript | `node` + `npx` (jest)      | `npx` (eslint)                                 |
-| TypeScript | `node` + `npx` (ts-jest)   | `npx` (eslint)                                 |
+| JavaScript | `node` + `npm install` (jest) | `node` + `npm install` (eslint)             |
+| TypeScript | `node` + `npm install` (ts-jest) | `node` + `npm install` (eslint)          |
 | C++        | `g++`                      | `clang-format`                                 |
 | Rust       | `rustc`                    | `rustfmt`                                      |
+
+For JavaScript/TypeScript, run `npm install` once in the repo root. The
+tools (jest, ts-jest, eslint, typescript, ts-node, prettier) are pinned in
+`package.json` / `package-lock.json` and run from `node_modules`, so nothing is
+downloaded on the fly. Until you do, JS/TS problems are skipped with
+`run 'npm install' first`. Needs Node 20.19+, 22.13+, or 24+.
 
 CI (`.github/workflows/ci.yml`) installs all of the above automatically, so
 everything is checked on every push/PR regardless of what you have locally.
