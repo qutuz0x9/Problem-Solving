@@ -3,3 +3,7 @@ target-version = "py311"
 
 [lint]
 select = ["E", "F", "I", "UP"]
+
+[lint.isort]
+# Each problem's solution.py is imported by its own tests and benchmark.
+known-first-party = ["solution"]
