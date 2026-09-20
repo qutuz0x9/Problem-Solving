@@ -1,7 +1,7 @@
 ---
 name: docs-check
 description: Check and fix the repo's Markdown files (markdownlint rules, aligned tables, links and anchors) with make docs, then fix what the automatic fixers cannot. Use when the user asks to check, fix or clean up Markdown docs, or after writing or editing several .md files.
-argument-hint: [file ...]
+argument-hint: "[file ...]"
 disable-model-invocation: true
 allowed-tools: Read, Edit, Bash(make docs:*), Bash(git status:*), Bash(git diff:*)
 ---
