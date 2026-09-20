@@ -40,7 +40,7 @@ helpers/
   rules/markdown.md    # Markdown conventions Claude follows when it edits a .md file
   hooks/md-check.sh    # lints each .md file Claude edits (wired in .claude/settings.json)
   agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter, benchmark-runner, pattern-tutor
-.github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
+.github/workflows/     # CI: runs `make test`, `make lint` and `make docs` on every push/PR
 package.json           # pinned JS/TS tooling (jest, ts-jest, eslint, ...); run `npm install` once
 eslint.config.js       # ESLint flat config for JS/TS problems
 Makefile               # thin wrapper: `include helpers/makefile`
@@ -77,7 +77,7 @@ newer; `.clang-format` is set to C++20 too. With an older compiler the build fai
 error about the unsupported standard.
 
 For JavaScript/TypeScript, run `npm install` once in the repo root. The
-tools (jest, ts-jest, eslint, typescript, ts-node, prettier) are pinned in
+tools (jest, ts-jest, eslint, typescript, ts-node, prettier, and markdownlint for `make docs`) are pinned in
 `package.json` / `package-lock.json` and run from `node_modules`, so nothing is
 downloaded on the fly. Until you do, JS/TS problems are skipped with
 `run 'npm install' first`. Needs Node 20.19+, 22.13+, or 24+.
@@ -294,7 +294,7 @@ make bench                                        # every problem (can be slow)
 ```
 
 Every problem has a benchmark file with the same shape in all six languages.
-It builds an input of several sizes (default `10`, `100`, `1000`, `10000` and
+It builds an input of five sizes (default `10`, `100`, `1000`, `10000` and
 `100000`, the `SIZES` list at the top, each 10x the last), does one warmup call,
 times several runs, and prints the fastest and the median time per size, plus a
 `growth` column: the fastest time divided by the previous size's. Go uses its own `b.Run` sub-benchmarks
@@ -471,8 +471,8 @@ variables `NO_COLOR` and `FORCE_COLOR` (and `VERBOSE` for test and lint); see St
 - **`make bench` fails with `TODO: implement`, `NotImplementedError` or
   `unimplemented!`** — the benchmark really calls `solve`, so implement it first.
   (Go and C++ scaffolds have no-op stubs, so they "run" without measuring anything.)
-- **Benchmark times are about 0 and do not grow with `n`** — you haven't filled in
-  the input builder yet, or `solve` is being called with an empty input. See Step 8.
+- **Benchmark times are about 0 and the `growth` column stays near `x1.0`** — you haven't
+  filled in the input builder yet, or `solve` is being called with an empty input. See Step 8.
 - **Benchmark numbers change a lot between runs** — that is normal noise. Run it a
   few times, close heavy programs, and compare the minimum column.
 - **`make docs` reports `MD036`, `MD040`, `MD034`, `MD060`, ...** — run `make docs FIX=1` for the automatic fixes,

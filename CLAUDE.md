@@ -24,19 +24,20 @@ make index                                   # regenerate README.md's Problem In
   not used for `codewars`/`other` (note kyu rank in the problem's README `Difficulty` field instead).
 - `make new` refuses to overwrite an existing problem folder.
 - `make bench` runs each problem's benchmark file (`helpers/run_bench.sh`, same colored UI as
-  test/lint, output always shown). Every language's benchmark template builds inputs of several
-  sizes (a marked `TODO` spot in `make_input`/`makeInput`), warms up, and prints min/median ms per
-  size (Go prints `go test -bench` output). A fresh scaffold's benchmark calls `solve`, so it fails
+  test/lint, output always shown). Every language's benchmark template builds inputs of five
+  sizes, 10x apart from 10 to 100,000 (a marked `TODO` spot in `make_input`/`makeInput`), warms up, and
+  prints min/median ms plus a `growth` column, the time versus the previous size (Go prints
+  `go test -bench` output). A fresh scaffold's benchmark calls `solve`, so it fails
   with the stub's `TODO` error until `solve` is implemented. See `USAGE.md` Step 8.
 - `make docs` lints every Markdown file (`helpers/run_docs.sh`): markdownlint with the rules in
   `.markdownlint.jsonc` (shared with the editor; line length off), aligned tables, and relative links/anchors
   (`helpers/md_tools.py`). `FIX=1` applies the automatic fixes. CI runs it. Write Markdown per
   `.claude/rules/markdown.md`: real headings (not bold lines), a language on every code fence, `<url>` instead of
   bare URLs, aligned tables.
-- JS/TS tooling (jest, ts-jest, eslint, ts-node, prettier) is pinned in the root `package.json`
-  and lockfile; run `npm install` once. The runners use `npx --no-install`, and JS/TS problems are
-  skipped (not failed) with `run 'npm install' first` if `node_modules` is missing. ESLint uses the
-  flat config in `eslint.config.js`.
+- JS/TS tooling (jest, ts-jest, eslint, ts-node, prettier, plus `markdownlint-cli2` for `make docs`) is pinned
+  in the root `package.json` and lockfile; run `npm install` once. The runners use `npx --no-install`, and
+  JS/TS problems are skipped (not failed) with `run 'npm install' first` if `node_modules` is missing. ESLint
+  uses the flat config in `eslint.config.js`.
 - Locally, `make test`/`make lint` print `skip (<tool> not installed): <path>` and continue when
   a toolchain isn't present, rather than failing — this is expected on a machine without every
   language installed. CI (`.github/workflows/ci.yml`) always installs Go, Python, Node, Rust,
@@ -81,7 +82,7 @@ make index                                   # regenerate README.md's Problem In
 - `.claude/skills/problem-readme/` — the `/problem-readme <url> [lang]` skill: fetches a problem via
   `helpers/fetch_problem.py` (LeetCode GraphQL, Codewars API, Codeforces metadata only), runs `make new`,
   and fills the README (paraphrased statement, verbatim examples/constraints; Approach/Complexity stay TODO).
-- `.github/workflows/ci.yml` is the only thing under `.github/`.
+- `.github/workflows/ci.yml` is the only thing under `.github/`; it runs `make test`, `make lint` and `make docs`.
 
 ## Adding a solved problem (typical flow)
 

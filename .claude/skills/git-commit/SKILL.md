@@ -84,15 +84,15 @@ Co-Authored-By: <attribution line from the session context>
 
 Derive the scope from the changed paths. Current scopes in this repo:
 
-| Paths                                                                                          | Scope                                                |
-|------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `problems/<platform>/<slug>/`                                                                  | `<platform>` (leetcode, codeforces, codewars, other) |
-| `patterns/`                                                                                    | `patterns`                                           |
-| `helpers/`, `Makefile`                                                                         | `helpers`                                            |
-| `.github/workflows/`                                                                           | `ci`                                                 |
-| `README.md`, `USAGE.md`, `problems/README.md`                                                  | `docs`                                               |
-| `.claude/`, `CLAUDE.md`                                                                        | `claude`                                             |
-| `.clang-format`, `ruff.toml`, `.golangci.yml`, `.eslintrc.json`, `rustfmt.toml`, `.prettierrc` | `lint`                                               |
+| Paths                                                                                                                                               | Scope                                                |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `problems/<platform>/<slug>/`                                                                                                                       | `<platform>` (leetcode, codeforces, codewars, other) |
+| `patterns/`                                                                                                                                         | `patterns`                                           |
+| `helpers/`, `Makefile`                                                                                                                              | `helpers`                                            |
+| `.github/workflows/`                                                                                                                                | `ci`                                                 |
+| `README.md`, `USAGE.md`, `AGENTS_USAGE.md`, `problems/README.md`                                                                                    | `docs`                                               |
+| `.claude/`, `CLAUDE.md`                                                                                                                             | `claude`                                             |
+| `.clang-format`, `ruff.toml`, `.golangci.yml`, `eslint.config.js`, `rustfmt.toml`, `.prettierrc`, `.markdownlint.jsonc`, `.markdownlint-cli2.jsonc` | `lint`                                               |
 
 If changes span several scopes, omit the scope or split the commit.
 

@@ -15,11 +15,11 @@ auto-generated problem index.
   language of each problem and run the right tool, with colored output and a
   summary. A missing toolchain is skipped, not a failure.
 - **Benchmarks included** — every problem gets a benchmark harness that times
-  your solution on inputs of several sizes.
+  your solution on five input sizes (10 to 100,000) and shows how the time grows.
 - **Auto-generated problem index** — `make index` keeps the table below in sync
   with everything under `problems/`.
-- **CI-ready** — GitHub Actions runs tests and lint across all toolchains on
-  every push/PR.
+- **CI-ready** — GitHub Actions runs tests, lint and the docs check across all
+  toolchains on every push/PR.
 - **Docs that lint clean** — `make docs` checks every Markdown file (markdownlint rules, aligned tables, links and
   anchors), the editor uses the same rules, and CI runs it.
 - **Optional Claude Code helpers** — build a problem's README from its URL, plus
@@ -36,7 +36,7 @@ problems/              # solved problems, organized by platform
 patterns/              # cross-reference index of problem-solving techniques
 helpers/               # scaffold, fetch, test/lint/bench dispatch, index generator, templates
 .claude/               # Claude Code skills and agents (optional)
-.github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
+.github/workflows/     # CI: runs `make test`, `make lint` and `make docs` on every push/PR
 package.json           # pinned JS/TS tooling; run `npm install` once
 eslint.config.js       # ESLint flat config for JS/TS problems
 .markdownlint.jsonc     # Markdown lint rules (also read by the editor)
