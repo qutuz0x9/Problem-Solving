@@ -25,7 +25,7 @@ and never commit. Suggest `/git-commit` when you are done.
 
 The README follows `helpers/templates/README.md`:
 
-```
+```markdown
 # <Title>
 
 - **Platform:** ...   - **Language:** ...   - **Link:** ...   - **Difficulty:** ...   - **Tags:** ...
@@ -44,7 +44,8 @@ The README follows `helpers/templates/README.md`:
 - **Approach.** Describe what the code actually does and why it works, plus any gotchas.
 - **Complexity.** Derive time and space from the code, not from what the placeholder says.
 
-Leave no `TODO` in the file.
+Leave no `TODO` in the file. Follow `.claude/rules/markdown.md` (wrap URLs in `<>`, give every code fence a
+language, align tables), and check the README with `make docs FILE=<path>` before you report.
 
 ## 2. Link it under a pattern
 
@@ -52,7 +53,7 @@ Existing pattern files in `patterns/`: `two-pointers`, `sliding-window`, `binary
 `dynamic-programming`, `graphs-bfs-dfs`. Pick the technique the solution really uses (there can be more than one),
 and add a bullet under `## Problems` in that file:
 
-```
+```markdown
 - [leetcode/0001-two-sum](../problems/leetcode/0001-two-sum) (Go)
 ```
 

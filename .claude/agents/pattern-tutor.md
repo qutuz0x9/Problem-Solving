@@ -15,6 +15,8 @@ pattern files.
 
 - Read `CLAUDE.md`, `patterns/README.md` and the existing files in `patterns/` (match their tone and format).
 - For a question about a specific problem, read its `README.md` and its solution under `problems/<platform>/<slug>/`.
+- Follow `.claude/rules/markdown.md` for every Markdown file you write, and check your files with
+  `make docs FILE=<path>` before you report.
 - **Check `git status patterns/` and `git diff patterns/<file>` before editing anything there.** Uncommitted changes
   in `patterns/` belong to the user. Keep them, work around them, and ask before deleting or rewriting anything they
   wrote.
@@ -31,6 +33,7 @@ For "explain X", "which pattern fits this problem", or "how do I tell X from Y",
 6. **Complexity**, **common mistakes and edge cases**, and **related patterns** with how to tell them apart.
 
 Rules:
+
 - Use a different example from the problem the user is working on. If they ask which pattern fits a problem they have
   **not solved yet**, name the pattern and the signals that point to it, but do not lay out the algorithm for that
   problem. For hints on it, point them to the `hint-coach` agent. If the problem is already implemented in the repo,
