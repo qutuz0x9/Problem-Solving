@@ -79,6 +79,9 @@ The same ten steps as in [`USAGE.md` §3](USAGE.md#3-step-by-step-solving-a-new-
 9. **Lint**: `make lint`.
 10. **Update the index and commit**: `make index`, `make docs`, then commit.
 
+For the agent-assisted version of these steps, with a diagram, a C++ example and the push to GitHub, see
+[`WORKFLOW.md`](WORKFLOW.md).
+
 Output options for `make test`, `make lint`, `make bench` and `make docs`: `NO_COLOR=1`
 turns colors off, `FORCE_COLOR=1` keeps them when piping, and `VERBOSE=1` also
 shows passing output for test and lint.
@@ -125,6 +128,7 @@ problems back, so docs it writes pass `make docs` the first time.
 ## 📚 Documentation
 
 - [`USAGE.md`](USAGE.md) — complete usage guide, start to finish (includes troubleshooting)
+- [`WORKFLOW.md`](WORKFLOW.md) — one problem end to end: create a C++ problem, use the agents, push it to GitHub
 - [`AGENTS_USAGE.md`](AGENTS_USAGE.md) — the Claude Code agents: when to use each, examples, output shapes
 - [`problems/README.md`](problems/README.md) — directory layout & naming conventions
 - [`patterns/README.md`](patterns/README.md) — pattern/technique cross-reference index

@@ -6,6 +6,7 @@ README index up to date. If you only read one doc in this repo, read this one.
 
 For quick reference see also:
 
+- `WORKFLOW.md` — one problem end to end: create it, use the agents, push it to GitHub
 - `AGENTS_USAGE.md` — how to use the Claude Code agents, with examples and output shapes
 - `problems/README.md` — directory layout & slug/naming conventions
 - `patterns/README.md` — cross-reference index of problem-solving techniques
