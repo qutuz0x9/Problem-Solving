@@ -10,6 +10,11 @@
 # Provides: run_step, skip, ui_header, ui_summary, plus $WORK_DIR (a temp dir
 # removed on exit) and the color variables ($GREEN, $RED, ...).
 
+# Wording for a successful step; callers (e.g. run_bench.sh) may override these
+# before sourcing this file.
+UI_PASS_LABEL="${UI_PASS_LABEL:-PASS}"
+UI_PASS_WORD="${UI_PASS_WORD:-passed}"
+
 PASSED=0
 FAILED=0
 SKIPPED=0
@@ -107,8 +112,8 @@ run_step() {
 
   if [[ "$status" -eq 0 ]]; then
     PASSED=$((PASSED + 1))
-    printf '  %s%s PASS%s  %s  %s  %s%s%s\n' \
-      "$GREEN$BOLD" "$ICON_PASS" "$RESET" "$(badge "$lang")" "$rel" "$DIM" "$elapsed" "$RESET"
+    printf '  %s%s %s%s  %s  %s  %s%s%s\n' \
+      "$GREEN$BOLD" "$ICON_PASS" "$UI_PASS_LABEL" "$RESET" "$(badge "$lang")" "$rel" "$DIM" "$elapsed" "$RESET"
   else
     FAILED=$((FAILED + 1))
     FAILED_NAMES+=("$rel")
@@ -146,8 +151,8 @@ ui_summary() {
     exit 0
   fi
 
-  printf ' %s%s %d passed%s   %s%s %d failed%s   %s%s %d skipped%s   %s%s%s\n' \
-    "$GREEN$BOLD" "$ICON_PASS" "$PASSED" "$RESET" \
+  printf ' %s%s %d %s%s   %s%s %d failed%s   %s%s %d skipped%s   %s%s%s\n' \
+    "$GREEN$BOLD" "$ICON_PASS" "$PASSED" "$UI_PASS_WORD" "$RESET" \
     "$RED$BOLD" "$ICON_FAIL" "$FAILED" "$RESET" \
     "$YELLOW$BOLD" "$ICON_SKIP" "$SKIPPED" "$RESET" \
     "$DIM" "$elapsed" "$RESET"
@@ -166,7 +171,7 @@ ui_summary() {
   if [[ "$PASSED" -eq 0 ]]; then
     echo "${YELLOW}No $noun ran (every toolchain was skipped).${RESET}"
   else
-    echo "${GREEN}${BOLD}All $noun passed.${RESET}"
+    echo "${GREEN}${BOLD}All $noun $UI_PASS_WORD.${RESET}"
   fi
   echo
   exit 0

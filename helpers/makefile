@@ -1,6 +1,6 @@
 # Included by the root Makefile. Holds the actual target logic.
 
-.PHONY: new test lint index
+.PHONY: new test lint bench index
 
 # Shell-quote a value (single quotes, with embedded ' escaped) so titles and
 # URLs containing spaces, &, ?, etc. reach the script as one argument.
@@ -18,6 +18,9 @@ test:
 
 lint:
 	@helpers/run_lint.sh $(DIR)
+
+bench:
+	@helpers/run_bench.sh $(DIR)
 
 index:
 	@helpers/generate_index.sh

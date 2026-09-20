@@ -51,7 +51,7 @@ lint_dir() {
     fi
   elif [[ -f "$dir/solution.rs" ]]; then
     if have rustfmt; then
-      run_step rust "$dir" "rustfmt --check --color $color solution.rs"
+      run_step rust "$dir" "rustfmt --check --color $color solution.rs benchmark.rs"
     else
       skip rust "$rel" "rustfmt not installed"
     fi

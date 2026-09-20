@@ -173,6 +173,7 @@ case "$LANG" in
     ;;
   rust)
     render "$LANG_TEMPLATE_DIR/solution.rs" "$PROBLEM_DIR/solution.rs"
+    render "$LANG_TEMPLATE_DIR/benchmark.rs" "$PROBLEM_DIR/benchmark.rs"
     ;;
 esac
 
