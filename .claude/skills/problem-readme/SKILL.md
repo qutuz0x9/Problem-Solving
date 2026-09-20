@@ -12,7 +12,7 @@ the statement, difficulty, tags and link by hand.
 
 ## Usage
 
-```
+```txt
 /problem-readme https://leetcode.com/problems/contains-duplicate-ii/
 /problem-readme https://leetcode.com/problems/contains-duplicate-ii/ cpp
 ```
@@ -74,11 +74,13 @@ the statement, difficulty, tags and link by hand.
    - The first line is the clean title. It becomes the row title in the root README index.
    - **Paraphrase the statement, copy examples and constraints verbatim.** Problem text is copyrighted and this repo
      is pushed to GitHub, so do not paste the whole statement.
-   - Keep code fences around example input and output. Keep constraints as a list with backticks.
+   - Keep code fences around example input and output, **always with a language** (` ```txt `). Keep constraints as a
+     list with backticks. Wrap the link in angle brackets (`<https://...>`); a bare URL fails the linter.
    - Leave **Approach** and **Complexity** as `TODO`: nothing is solved yet. The `problem-documenter` agent fills
      them once the solution exists.
    - For an existing folder, replace the header block and the **Problem** section, and leave the rest alone.
-5. **Refresh the index**: run `make index`.
+5. **Refresh the index**: run `make index`, then check the README with `make docs FILE=<path to the README>` and fix
+   anything it reports (see `.claude/rules/markdown.md`).
 6. **Report** the folder, the language, what was filled in, and anything you could not get (missing statement,
    unknown difficulty). Remind the user to implement `solution.<ext>`, then use `test-writer` and
    `problem-documenter`, and commit with `/git-commit`.

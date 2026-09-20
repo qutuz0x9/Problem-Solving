@@ -2,7 +2,7 @@
 
 - **Platform:** {{PLATFORM}}
 - **Language:** {{LANGUAGE}}
-- **Link:** {{URL}}
+- **Link:** <{{URL}}>
 - **Difficulty:** TODO
 - **Tags:** TODO
 

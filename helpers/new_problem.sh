@@ -125,6 +125,7 @@ render() {
   local drop_empty_url=()
   if [[ -z "$URL" ]]; then
     drop_empty_url=(
+      -e 's/^\(- \*\*Link:\*\*\) <{{URL}}>$/\1 TODO/'
       -e '/^[[:space:]]*{{URL}}[[:space:]]*$/d'
       -e '/^[[:space:]]*\/\/ *{{URL}}[[:space:]]*$/d'
       -e '/^[[:space:]]*\/\/! *{{URL}}[[:space:]]*$/d'

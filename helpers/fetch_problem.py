@@ -68,7 +68,7 @@ class HtmlToMarkdown(HTMLParser):
         elif tag == "pre":
             self.in_pre = True
             self.pre_start = len(self.out)
-            self.out.append("\n\n```\n")
+            self.out.append("\n\n```txt\n")
         elif tag == "code" and not self.in_pre:
             self.in_code = True
             self.out.append("`")
