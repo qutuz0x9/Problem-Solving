@@ -1,5 +1,4 @@
 // {{TITLE}} ({{PLATFORM}})
-// {{URL}}
 #include "solution.h"
 
 // Implements the solution for {{TITLE}}.

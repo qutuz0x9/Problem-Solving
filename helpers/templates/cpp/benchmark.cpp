@@ -1,6 +1,7 @@
 // Lightweight timing benchmark for {{TITLE}}.
 #include <chrono>
 #include <cstdio>
+
 #include "solution.h"
 
 int main() {

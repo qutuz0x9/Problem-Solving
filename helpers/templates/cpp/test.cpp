@@ -1,6 +1,7 @@
 // Minimal assert-based test runner (no external test framework dependency).
 #include <cassert>
 #include <cstdio>
+
 #include "solution.h"
 
 int main() {
