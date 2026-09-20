@@ -21,7 +21,7 @@ auto-generated problem index.
 - **CI-ready** — GitHub Actions runs tests and lint across all toolchains on
   every push/PR.
 - **Optional Claude Code helpers** — build a problem's README from its URL, plus
-  agents for hints, reviews, tests, docs and benchmarks.
+  agents for hints, reviews, tests, docs, benchmarks and patterns.
 
 ## 📁 Project structure
 
@@ -99,18 +99,19 @@ installs everything. Install commands are in
 ## 🤖 Claude Code (optional)
 
 Everything works without AI tooling. With [Claude Code](https://claude.com/claude-code),
-`.claude/` adds two skills and five agents (details in
+`.claude/` adds two skills and six agents (details in
 [`USAGE.md` §9](USAGE.md#9-working-with-claude-code-optional)); none of them commits on its own.
 
-| Skill or agent                 | What it does                                                                  |
-|--------------------------------|-------------------------------------------------------------------------------|
-| `/problem-readme <url> [lang]` | Fetches a problem, runs `make new`, and fills the README                      |
-| `/git-commit`                  | Writes a Conventional Commits message; you approve it before it commits       |
-| `hint-coach`                   | Gives hints without revealing the solution                                    |
-| `solution-reviewer`            | Reviews a solution (read-only) and runs test and lint                         |
-| `test-writer`                  | Replaces the placeholder test with real cases                                 |
-| `problem-documenter`           | Fills Approach/Complexity, links a pattern, runs `make index`                 |
-| `benchmark-runner`             | Writes the benchmark input builder and checks growth vs your complexity claim |
+| Skill or agent                 | What it does                                                                        |
+|--------------------------------|-------------------------------------------------------------------------------------|
+| `/problem-readme <url> [lang]` | Fetches a problem, runs `make new`, and fills the README                            |
+| `/git-commit`                  | Writes a Conventional Commits message; you approve it before it commits             |
+| `hint-coach`                   | Gives hints without revealing the solution                                          |
+| `solution-reviewer`            | Reviews a solution (read-only) and runs test and lint                               |
+| `test-writer`                  | Replaces the placeholder test with real cases                                       |
+| `problem-documenter`           | Fills Approach/Complexity, links a pattern, runs `make index`                       |
+| `benchmark-runner`             | Writes the benchmark input builder and checks growth vs your complexity claim       |
+| `pattern-tutor`                | Explains patterns with diagrams and verified C++ examples; writes `patterns/` files |
 
 ## 📚 Documentation
 

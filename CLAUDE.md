@@ -65,7 +65,8 @@ make index                                   # regenerate README.md's Problem In
   the solution), `solution-reviewer` (read-only review + `make test`/`make lint`), `test-writer`
   (replaces the placeholder test with real cases), and `problem-documenter` (README TODOs,
   `patterns/` link, `make index`), and `benchmark-runner` (writes the benchmark input builder, runs
-  `make bench`, checks growth vs the README's complexity). None of them commit.
+  `make bench`, checks growth vs the README's complexity), and `pattern-tutor` (explains patterns
+  with diagrams and verified C++ examples; writes/audits `patterns/` files). None of them commit.
 - `.claude/skills/problem-readme/` — the `/problem-readme <url> [lang]` skill: fetches a problem via
   `helpers/fetch_problem.py` (LeetCode GraphQL, Codewars API, Codeforces metadata only), runs `make new`,
   and fills the README (paraphrased statement, verbatim examples/constraints; Approach/Complexity stay TODO).

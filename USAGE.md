@@ -34,7 +34,7 @@ helpers/
   makefile             # actual Makefile target logic (included by root Makefile)
 .claude/
   skills/              # Claude Code skills: /git-commit, /problem-readme
-  agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter, benchmark-runner
+  agents/              # Claude Code agents: hint-coach, solution-reviewer, test-writer, problem-documenter, benchmark-runner, pattern-tutor
 .github/workflows/     # CI: runs `make test` and `make lint` on every push/PR
 package.json           # pinned JS/TS tooling (jest, ts-jest, eslint, ...); run `npm install` once
 eslint.config.js       # ESLint flat config for JS/TS problems
@@ -407,7 +407,9 @@ search, DP, BFS/DFS, ...), add a link under the matching file in `patterns/`:
 ```
 
 If the technique doesn't have a file yet, create `patterns/<pattern-name>.md`
-and add it to the index in `patterns/README.md`.
+and add it to the index in `patterns/README.md`. In Claude Code, the
+`pattern-tutor` agent can explain a technique (signals, diagram, traced example,
+verified C++ template) and write or audit these files for you.
 
 ## 6. Makefile reference
 
@@ -486,7 +488,7 @@ and add it to the index in `patterns/README.md`.
 
 Everything above works without any AI tooling. If you use
 [Claude Code](https://claude.com/claude-code) in this folder, `.claude/` adds two
-skills (slash commands) and five agents that automate the tedious steps around
+skills (slash commands) and six agents that automate the tedious steps around
 solving a problem. None of them commits anything on their own.
 
 ### **Skills**
@@ -498,13 +500,14 @@ solving a problem. None of them commits anything on their own.
 
 **Agents** (Claude picks them when the task fits, or ask for one by name)
 
-| Agent                | Use it to...                                                                                                           | Can edit files?                     |
-|----------------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
-| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                              | No (read-only)                      |
-| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint             | No (read-only)                      |
-| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                                    | Only the test file                  |
-| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`                        | README, `patterns/`                 |
-| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim | Only the benchmark file             |
+| Agent                | Use it to...                                                                                                                      | Can edit files?           |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                                         | No (read-only)            |
+| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint                        | No (read-only)            |
+| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                                               | Only the test file        |
+| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`                                   | README, `patterns/`       |
+| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim            | Only the benchmark file   |
+| `pattern-tutor`      | Explain a pattern with diagrams and verified C++ examples, say which pattern fits a problem, and write or audit `patterns/` files | Only files in `patterns/` |
 
 ### **A typical session**
 
@@ -514,6 +517,7 @@ solving a problem. None of them commits anything on their own.
 "use test-writer on problems/leetcode/0219-contains-duplicate-ii"
 "use solution-reviewer on problems/leetcode/0219-contains-duplicate-ii"
 "use benchmark-runner on problems/leetcode/0219-contains-duplicate-ii"
+"use pattern-tutor to explain sliding window"
 "use problem-documenter on problems/leetcode/0219-contains-duplicate-ii"
 git add problems/leetcode/0219-contains-duplicate-ii README.md patterns/
 /git-commit
