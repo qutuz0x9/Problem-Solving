@@ -209,3 +209,5 @@ Result: `1 -1 3 5 5 -1`, which matches the printed output.
 | Mistakes     | Storing values not indices, wrong `<` vs `<=` on ties, empty-stack reads, leftovers unused. |
 
 ## Problems
+
+- [leetcode/0496-next-greater-element-i](../problems/leetcode/0496-next-greater-element-i) (C++)
