@@ -317,8 +317,9 @@ Verdict: the timings match the O(n) claim in the README.
 
 ### 3.6 pattern-tutor
 
-**Use it when** you want to understand a technique, know which pattern fits a problem, or want a `patterns/` file
-written, improved or checked. It has two jobs (and a quiz mode).
+**Use it when** you want to study a technique, know which pattern fits a problem, or want a `patterns/` file
+written, improved or checked. It follows your study prompt, `.claude/prompts/study-pattern.md`, so edit that file to
+change what an explanation contains. It has two jobs (and a quiz mode).
 
 **Try saying:**
 
@@ -329,73 +330,53 @@ written, improved or checked. It has two jobs (and a quiz mode).
 - `pattern-tutor: write patterns/hash-map.md`
 - `pattern-tutor: audit patterns/`
 
-**Job 1: explain (written to `patterns/<name>.md`).** "Explain X" writes the explanation into that pattern file
+**Job 1: study a pattern (written to `patterns/<name>.md`).** "Explain X" writes the study notes into that pattern file
 (creating it and adding it to the index, or extending it while keeping your uncommitted edits) and replies in chat
 with only a short summary and the path. Questions about one specific problem ("which pattern fits ...") and quiz mode
 stay in chat. It uses a *different* example from the problem you are working on. If you ask which pattern fits a
 problem you have **not solved yet**, it names the pattern and its signals but does not lay out the algorithm (use
 `hint-coach` for that). If the problem is already implemented, it can discuss it freely.
 
-**Output shape (explain).** The file has these parts, in this order (the chat reply is just a short summary):
+**Output shape (explain).** The file follows the nine steps of the study prompt, one section each, in this order (the
+chat reply is just a short summary):
 
 ```txt
-1. The idea, in one or two sentences
-2. Signals in the statement and constraints, and when NOT to use it
-3. Diagrams: ASCII for the data, plus a Mermaid decision-flow diagram of how the pattern works (always included)
-4. A small worked example, traced step by step
-5. A C++ template (compiled and run before it is shown)
-6. Complexity, common mistakes and edge cases, related patterns and how to tell them apart
+1. Definition
+2. How it works (the full operation, theoretically)
+3. Complexity (time and space)
+4. Diagram (ASCII)
+5. Mermaid diagram (a decision flow of the loop)
+6. How to recognize it
+7. Common mistakes
+8. Code example (simple C++, compiled and run first, then explained and traced)
+9. Summary table: Mental model, Template, Recognize, Mistakes
 ```
 
-**Example (illustrative), content written to the file:**
+**Example (illustrative), the summary table at the end of a file:**
 
-````txt
-Sliding window (fixed size)
-
-Idea: keep a window [l..r] and update a running value by adding the element that enters and dropping the one that
-leaves, instead of recomputing it from scratch. O(n) instead of O(n*k).
-
-Signals: "subarray or substring of length k", "longest/shortest contiguous part such that ...", one left-to-right pass.
-Not for: a sum target with negative numbers (the window cannot be shrunk greedily). Use prefix sums + a hash map.
-
-  index:   0  1  2  3  4  5      k = 3
-  value:  [2  1  5  1  3  2]
-           [---------]          sum = 8
-              [---------]       sum = 8 - 2 + 1 = 7
-                 [---------]    sum = 7 - 1 + 3 = 9   <- best
-                    [---------] sum = 9 - 5 + 2 = 6
-
-int MaxWindowSum(const std::vector<int>& a, int k) {
-    int sum = 0;
-    for (int i = 0; i < k; i++) sum += a[i];
-    int best = sum;
-    for (size_t r = k; r < a.size(); r++) {
-        sum += a[r] - a[r - k];  // add the entering element, drop the leaving one
-        best = std::max(best, sum);
-    }
-    return best;
-}
-// {2, 1, 5, 1, 3, 2}, k = 3 -> 9        (compiled with g++ -std=c++20 -Wall -Wextra and run)
-
-Complexity: O(n) time, O(1) space.
-Common mistakes: forgetting the first window, an off-by-one at a[r - k], using it with negative numbers and a sum target.
-Related: two pointers (a variable window is two pointers moving the same way); prefix sums (when the window cannot shrink).
-````
+```markdown
+| Part         | Summary                                                                 |
+|--------------|-------------------------------------------------------------------------|
+| Mental model | A window [l..r] that slides right; add what enters, drop what leaves.   |
+| Template     | Grow r each step, shrink l while the window is invalid, record the best. |
+| Recognize    | "Contiguous subarray or substring", "longest or shortest such that ...". |
+| Mistakes     | Off-by-one at the window edge; using it with negatives and a sum target. |
+```
 
 **Quiz mode.** It gives a paraphrased problem statement, waits for you to name the pattern, then reveals the answer
 and the signals you should have spotted.
 
-**Job 2: write, update or audit `patterns/`.** Pattern files use this layout, in order: *When to use*, *Core idea*,
-*Template*, *Walkthrough*, *Variants*, *Complexity*, *Common mistakes and edge cases*, *Related patterns*, *Practice
-ladder*, and finally `## Problems`. The `## Problems` list is **never rewritten** (it belongs to you and to
-`problem-documenter`), it checks `git diff patterns/<file>` before editing so your uncommitted edits survive, and it
-only lists practice problems it is certain exist. New pattern files are added to the index in `patterns/README.md`. It checks the files it writes with `make docs`.
+**Job 2: write, update or audit `patterns/`.** Pattern files use the study layout above, followed by a final
+`## Problems` section. The `## Problems` list is **never rewritten** (it belongs to you and to `problem-documenter`),
+the agent checks `git diff patterns/<file>` before editing so your uncommitted edits survive, and it does not migrate
+files written in the older C++ layout unless you ask. New pattern files are added to the index in
+`patterns/README.md`. It checks the files it writes with `make docs`.
 
 **Output shape (write or audit).** No fixed template. The prompt asks for:
 
 ```txt
 - the files changed, what was added, and what was preserved
-- what was verified (C++ compiled and run, links checked)
+- what was verified (C++ compiled and run, links checked, whether the Mermaid diagrams were rendered)
 - anything it was unsure about
 ```
 

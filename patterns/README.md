@@ -23,3 +23,6 @@ different speeds) to avoid nested loops.
 (Add a bullet here each time you create a new pattern file.)_
 
 - [two-pointers](two-pointers.md)
+- [monotonic-stack](monotonic-stack.md)
+- [monotonic-queue](monotonic-queue.md)
+- [stack](stack.md)

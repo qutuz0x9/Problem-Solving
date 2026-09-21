@@ -110,17 +110,17 @@ Everything works without AI tooling. With [Claude Code](https://claude.com/claud
 [`USAGE.md` §9](USAGE.md#9-working-with-claude-code-optional) and
 [`AGENTS_USAGE.md`](AGENTS_USAGE.md)); none of them commits on its own.
 
-| Skill or agent                 | What it does                                                                        |
-|--------------------------------|-------------------------------------------------------------------------------------|
-| `/problem-readme <url> [lang]` | Fetches a problem, runs `make new`, and fills the README                            |
-| `/docs-check`                  | Checks and fixes the Markdown docs (`make docs FIX=1`), then repairs what is left   |
-| `/git-commit`                  | Writes a Conventional Commits message; you approve it before it commits             |
-| `hint-coach`                   | Gives hints without revealing the solution                                          |
-| `solution-reviewer`            | Reviews a solution (read-only) and runs test and lint                               |
-| `test-writer`                  | Replaces the placeholder test with real cases                                       |
-| `problem-documenter`           | Fills Approach/Complexity, links a pattern, runs `make index`                       |
-| `benchmark-runner`             | Writes the benchmark input builder and checks growth vs your complexity claim       |
-| `pattern-tutor`                | Explains patterns with diagrams and verified C++ examples; writes `patterns/` files |
+| Skill or agent                 | What it does                                                                                                                                |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `/problem-readme <url> [lang]` | Fetches a problem, runs `make new`, and fills the README                                                                                    |
+| `/docs-check`                  | Checks and fixes the Markdown docs (`make docs FIX=1`), then repairs what is left                                                           |
+| `/git-commit`                  | Writes a Conventional Commits message; you approve it before it commits                                                                     |
+| `hint-coach`                   | Gives hints without revealing the solution                                                                                                  |
+| `solution-reviewer`            | Reviews a solution (read-only) and runs test and lint                                                                                       |
+| `test-writer`                  | Replaces the placeholder test with real cases                                                                                               |
+| `problem-documenter`           | Fills Approach/Complexity, links a pattern, runs `make index`                                                                               |
+| `benchmark-runner`             | Writes the benchmark input builder and checks growth vs your complexity claim                                                               |
+| `pattern-tutor`                | Studies a pattern by following `.claude/prompts/study-pattern.md` (diagrams, verified C++ example, summary table); writes `patterns/` files |
 
 Claude also follows `.claude/rules/markdown.md`, and a hook lints every Markdown file it edits and reports the
 problems back, so docs it writes pass `make docs` the first time.

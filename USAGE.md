@@ -524,14 +524,14 @@ solving a problem. None of them commits anything on their own.
 
 **Agents** (Claude picks them when the task fits, or ask for one by name)
 
-| Agent                | Use it to...                                                                                                                      | Can edit files?           |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|
-| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                                         | No (read-only)            |
-| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint                        | No (read-only)            |
-| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                                               | Only the test file        |
-| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`                                   | README, `patterns/`       |
-| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim            | Only the benchmark file   |
-| `pattern-tutor`      | Explain a pattern with diagrams and verified C++ examples, say which pattern fits a problem, and write or audit `patterns/` files | Only files in `patterns/` |
+| Agent                | Use it to...                                                                                                                                                                            | Can edit files?           |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| `hint-coach`         | Get progressive hints when you're stuck, without being shown the solution                                                                                                               | No (read-only)            |
+| `solution-reviewer`  | Review a finished solution: correctness, edge cases, complexity claims, leftover stubs; runs test and lint                                                                              | No (read-only)            |
+| `test-writer`        | Replace the placeholder test with real cases and edge cases, then run test and lint                                                                                                     | Only the test file        |
+| `problem-documenter` | Fill the README's Approach/Complexity, link the problem under `patterns/`, and run `make index`                                                                                         | README, `patterns/`       |
+| `benchmark-runner`   | Write the benchmark's input builder for your problem, run `make bench`, and check growth against your complexity claim                                                                  | Only the benchmark file   |
+| `pattern-tutor`      | Study a pattern by following `.claude/prompts/study-pattern.md` (diagrams, verified C++ example, summary table), say which pattern fits a problem, and write or audit `patterns/` files | Only files in `patterns/` |
 
 ### **A typical session**
 
