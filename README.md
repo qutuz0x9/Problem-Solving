@@ -138,10 +138,9 @@ problems back, so docs it writes pass `make docs` the first time.
 
 <!-- PROBLEM_INDEX:START -->
 
-| Platform | Problem                                                                         | Language |
-|----------|---------------------------------------------------------------------------------|----------|
-| leetcode | [Contains Duplicate II](problems/leetcode/0219-contains-duplicate-ii)           | C++      |
-| leetcode | [Intersection of Two Arrays](problems/leetcode/0349-intersection-of-two-arrays) | C++      |
-| leetcode | [Next Greater Element I](problems/leetcode/0496-next-greater-element-i)         | C++      |
+| Platform | Problem                                                                 | Language |
+|----------|-------------------------------------------------------------------------|----------|
+| leetcode | [Contains Duplicate II](problems/leetcode/0219-contains-duplicate-ii)   | C++      |
+| leetcode | [Next Greater Element I](problems/leetcode/0496-next-greater-element-i) | C++      |
 
 <!-- PROBLEM_INDEX:END -->
